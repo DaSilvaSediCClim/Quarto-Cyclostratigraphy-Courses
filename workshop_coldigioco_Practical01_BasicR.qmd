@@ -1,0 +1,226 @@
+---
+title: "Time-Series Analysis of Paleoclimate Signals – Practical 01 - Basics on R"
+title-block-banner: "darkturquoise"
+subtitle: |
+  Coldigiocco Cyclonet Summer School 2025<br>
+  by C. Zeeden, M. Crucifix, A.C. Da Silva
+author: "Anne-Christine Da Silva"
+date: today
+bibliography: references.bib
+format:
+  html:
+    embed-resources: true
+    toc: true
+    toc-depth: 3
+    css: styles.css  # ← Link to your CSS file
+execute: 
+  cache: true
+---
+
+
+# Basic R Usage
+
+This section introduces some basic operations in R that can be useful for anyone starting with time series analysis or data manipulation.
+
+If you want to learn more in-depth on R data manipulation, a lot of resources are available for free, including [cran.r-project.org/doc/contrib/Paradis-rdebuts_en.pdf](cran.r-project.org/doc/contrib/Paradis-rdebuts_en.pdf) and <https://education.rstudio.com/learn/beginner/>
+
+If you already know some R basics, you can skip this part.
+
+## Opening and saving files
+
+::: {.callout-tip title="Tip on R and commenting and setting working directory"}
+In R the codes is the classic text, when you have this sign \# is used to make comments (it is not send to the console as a code). In the following text, some codes are commented, because they need to be modified by you for specific tasks. For example, it is important to define a working directory on your computer (where R can take information and where you can save any new information created).
+:::
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide
+
+# Set your working directory (change the path accordingly) 
+# setwd("C:/computer/path")  
+```
+
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide
+
+# we load astrochron 
+library(astrochron) 
+
+# Load example data
+dataLR<-getData(dat="607-18O")
+# Data from Lisiecki, L.E., Raymo, M.E., 2005, A Pliocene-Pleistocene
+# stack of 57 globally distributed d18O records, Paleoceanography, 20, PA1003, doi:10.1029/2004PA001071.
+
+plot(dataLR, type='l')
+
+# Uncomment the following line to view your dataset : 
+# View(dataLR)
+
+# Save and reload
+write.csv(dataLR, file="Data_L_R.csv", row.names=FALSE) # to save the file 607-18O
+DataM <- read.csv("Data_L_R.csv") # to reopen the file 607-18O you just downloaded
+
+# Uncomment the following line to view your new dataset : 
+# View(DataM) # to visualize the dataframe you created 
+```
+
+## Simple data exploration
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide
+#| 
+# View the structure of the data 
+str(dataLR)  
+
+# Summary statistics 
+summary(dataLR)  
+
+# Dimensions of the data 
+dim(dataLR)  
+
+# Names of the columns 
+colnames(dataLR)
+```
+
+## Basic data manipulation
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide
+#| 
+# Create a new column (e.g. doubling a value column) 
+dataLR$double_value <- dataLR$d18Obenthic * 2  
+
+# Filter rows (e.g. where value > 10) 
+subset_data <- dataLR[dataLR$d18Obenthic > 4, ]  
+
+# Select specific columns 
+data_LR_S <- dataLR[, c("Depth", "d18Obenthic")] 
+
+#or 
+data_LR_S <- dataLR[, c(1, 2)]   
+
+```
+
+::: {.callout-note title="? Question ?"}
+Use the function "View" to check the type of transformation that we have done to the data (dataLR, subset_data, data_LR_S)
+:::
+
+
+## Data manipulation with dplyr
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide
+
+# Install and load dplyr (if not already installed) 
+
+# install.packages("dplyr") 
+library(dplyr)  
+
+# Example data frame 
+data <- data.frame(   
+  time = 1:10,   
+  value = c(5, 6, 7, 8, 9, 10, 9, 8, 7, 6) )  
+
+# Filter rows 
+filtered <- data %>% filter(value > 7)  
+
+# Create new variable 
+mutated <- data %>% mutate(double = value * 2)  
+
+# Group and summarise 
+summary_stats <- data %>%   
+  group_by(value) %>%   
+  summarise(mean_time = mean(time))  
+
+# Arrange rows 
+sorted <- data %>% arrange(desc(value))
+```
+
+::: {.callout-note title="? Question ?"}
+Use the function "View" to check the type of transformation that we have done to the data (data, filtered, mutated, summary_stats, sorted)
+:::
+
+## Plotting with R
+
+::: {.callout-tip title="Tip on plotting"}
+R includes a basic plot function which is very versatile and easy to combine with multiple packages. It is embeded into R (no nead to download and load it). The commands get processed immediately and it does not create an R object that holds results.
+
+Other plotting packages have also been developed, including the classically used "ggplot2" which is a more integrated plotting package (fancier plots and more functions) and "plotly" which allows to make interactive plots (you can for example zoom or click on dots and see their associated values). Both ggplot2 and plotly are packages which should be installed and loaded for use. They have a specific grammar that can be saved as an R object and can get progressively modified by adding "layers" to a base plot.
+:::
+
+### Simple plots with basic R
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide
+
+# Time series plot 
+my_data<-data_LR_S 
+colnames(my_data)=c("time", "signal") 
+plot(my_data$time, my_data$signal, type = "o",      
+     xlab = "Time", ylab = "Signal", main = "Time Series Plot")  
+
+plot(my_data$time, my_data$signal, type = "p",      
+     xlab = "Time", ylab = "Signal", main = "Time Series Plot")  
+
+plot(my_data$time, my_data$signal, type = "l",      
+     xlab = "Time", ylab = "Signal", main = "Time Series Plot")  
+
+
+# Basic histogram 
+hist(my_data$signal, main = "Histogram of Signal", xlab = "Signal", col = "lightblue")  
+
+# Scatterplot 
+plot(my_data$time, my_data$signal, main = "Scatterplot", xlab = "Time", ylab = "Signal", pch = 16)
+```
+
+### Plotting with ggplot2
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide
+
+# Install and load ggplot2 (if not already installed) 
+# install.packages("ggplot2") 
+library(ggplot2)  
+
+# Basic time series line plot 
+ggplot(my_data, aes(x = time, y = signal)) +   
+  geom_line(color = "steelblue") +   
+  labs(title = "Time Series with ggplot2", x = "Time", y = "Value")  
+
+# Add points 
+ggplot(my_data, aes(x = time, y = signal)) +   
+  geom_line() +   
+  geom_point(color = "red")  
+
+# Histogram 
+ggplot(my_data, aes(x = signal)) +   
+  geom_histogram(binwidth = 1, fill = "lightgreen", color = "black")  
+
+
+# Boxplot 
+ggplot(my_data, aes(y = signal)) +   
+  geom_boxplot(fill = "lightblue")
+
+
+```

@@ -1,0 +1,424 @@
+---
+title: "Time-Series Analysis of Paleoclimate Signals – Practical 02"
+title-block-banner: "darkturquoise"
+subtitle: |
+  Basics on astrochron <br>
+  Coldigiocco Cyclonet Summer School 2025<br>
+  by C. Zeeden, M. Crucifix, A.C. Da Silva
+author: "Anne-Christine Da Silva"
+date: today
+bibliography: references.bib
+format:
+  html:
+    embed-resources: true
+    toc: true
+    toc-depth: 3
+    css: styles.css  # ← Link to your CSS file
+execute: 
+  cache: true
+---
+
+# Astrochron
+
+We have seen some basics of R, you should now set your working directory, be able to open and save files, to look into your data frame, to make basics data frame manipulations and to make basic plot and/or basic ggplot. It is more than enough to get through astrochron.
+
+## What is astrochron?
+
+Astrochron is a package designed for astrochronology and cyclostratigraphy, providing tools to analyze periodicities and orbital forcing in geological records.
+
+Complete information can be found there: https://cran.r-project.org/web/packages/astrochron/astrochron.pdf
+
+![Map of astrochron function](MapAstrochron.png){#fig-map-astro}
+
+**Citation:**
+Meyers, S.R. (2014). Astrochron: An R Package for Astrochronology.\https://cran.r-project.org/package=astrochron
+
+## How to install astrochron?
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide
+#| 
+# Those packages should already have been installed. 
+
+# install.packages("astrochron") 
+
+# install.packages(c("multitaper", "IDPmisc", "fields", "doParallel", "iterators", "foreach"))  
+
+
+# Load package 
+library(astrochron)
+library(ggplot2)
+```
+
+## Download and use of data embedded in astrochron
+
+::: {.callout-tip title="Tip on astrochron and embedded datasets"}
+astrochron includes multiple datasets to play with (check the help of getData function to see these datasets), as well as orbital solutions (check getLaskar, solutions from [@Laskar2004b and @Laskar2011b).
+:::
+
+```{r}
+#| echo: true 
+#| results: hide 
+#| warning: false 
+#| fig.show: hide  
+
+
+# you can download Laskar insolation from astrochron   
+sol_insol <- getLaskar(sol="insolation",verbose=T) 
+# you can also dowload la04 : three columns containing precession angle, obliquity, and eccentricity of [@Laskar2004b] 
+# or sol= la10a, la10b, la10c, la10d, la11 eccentricity only ; 
+
+# you can also extract datasets embedded into astrochron with: 
+# DataM<-getData("Dataset")
+# check the help for this function to see which data are there
+```
+
+## Time-series Analysis 
+When doing time-series analysis it is important to have first a look on your raw data. In the following practical we will use raw composition from an Antartica drill core [@Panter_2008]. 
+
+
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide  
+
+# from astrochron we can take the data from Panter, K.S., Talarico, F.M, Basset, K., et al., 2009,  Petrologic and geochemical composition of the AND-2A core, ANDRILL Southern McMurdo Sound Project, Antarctica: Terra Antartica 15, 147-192. 
+dataAND<-getData("AND2A-clast")
+
+# we will focus on the interval between 800 and 900 m interpreted to represent relatively continuous deposition 
+dataAND89<- iso(dataAND, xmin=800, xmax=900)
+
+plot(dataAND89, type='l')
+```
+
+::: {.callout-note title="? Question ?"}
+Without any background on your data, What do you see ? 
+
+Do you see any cyclic pattern, anything that can be considered bundled ?
+
+Take note of the thickness of potential cyclicities that you can observe. 
+:::
+
+
+
+
+## Periodogram and MTM
+
+Now we will start basic spectral analysis with periodogram (basic fourier transform) and Multi-Taper Method [MTM, @Thomson1982b]. Astrochron includes other multiple spectral analysis techniques (see @fig-map-astro, spectral analysis). Today we will use mostly the MTM, but later, you can check those and compare them.
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide  
+
+# here is the example of the periodogram 
+
+# it's a rather basic spectral analysis technique, without confidence level
+per_sol <- periodogram(sol_insol, output=1, verbose=F) 
+
+# MTM allows to include tapers and is combined with confidence level [@Thomson1982b]
+mtm_sol <- mtm(sol_insol, output=1, genplot=F, verbose=F) 
+
+```
+
+::: {.callout-tip title="Tip on astrochron - mtm function"}
+It is important that your data are interpolated prior to MTM analysis.
+
+Check the help for the mtm function: You can see different arguments, including the number of tapers, the possibility to remove the mean (demean), remove the trend (detrend), to include the significance level or not (ar1) and to change those significance level (siglevel), to plot it in log or not and an important function, the function "output" which by default is 0 (nothing is saved). You can save the power spectrum + harmonic CL + AR1 CL + AR1 fit + 90%-99% AR1 power levels be selecting (output = 1), significant peak frequencies (output=2), etc.
+
+Note also that when you run MTM, if you set verbose = T, the function will provide the sampling interval, number of samples, as well as the Nyquist and Rayleigh frequencies.
+:::
+
+
+## Interpolation
+
+We have seen that with getData and with getLaskar, we have access to some datasets. Now let's work on the interpolation and the implications of this interpolation (see @fig-map-astro data preparation).
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide  
+
+
+# check the statistics of your data
+strats(dataAND89) 
+
+
+# then we can interpolate to the median sampling interval 
+dataAND89_i <- linterp(dataAND89) 
+
+# we can apply a higher or lower interpolation
+dataAND89_i002 <- linterp(dataAND89, dt=0.02) 
+dataAND89_i02 <- linterp(dataAND89, dt=.2) 
+```
+
+::: {.callout-tip title="Tip on astrochron - interpolation"}
+When you interpolate, except if your sampling interval is perfectly regular (then you might not need to interpolate), most of the time you will change the number of samples. Check if this is the case, and check how it changes when you play with dt (=New sampling interval).
+:::
+
+Now that we have interpolated we can apply the MTM to our interpolated data
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide  
+
+mtm_AND89_i <- mtm(dataAND89_i, output=1, genplot=F, verbose=F) 
+mtm_AND89_i002 <- mtm(dataAND89_i002, output=1, genplot=F, verbose=F) 
+mtm_AND89_i02 <- mtm(dataAND89_i02, output=1, genplot=F, verbose=F)  
+
+plot(mtm_AND89_i$Frequency, mtm_AND89_i$Power, type='l', log = "y")
+lines(mtm_AND89_i$Frequency, mtm_AND89_i$AR1_95_power, lty=2)
+
+lines(mtm_AND89_i002$Frequency, mtm_AND89_i002$Power, col='purple')
+lines(mtm_AND89_i002$Frequency, mtm_AND89_i002$AR1_95_power, lty=2, col='purple')
+
+lines(mtm_AND89_i02$Frequency, mtm_AND89_i02$Power, col='darkturquoise')
+lines(mtm_AND89_i02$Frequency, mtm_AND89_i02$AR1_95_power, lty=2, col='darkturquoise')
+
+# the dotted lines corresponds to the 95 % confidence level 
+
+```
+
+::: {.callout-note title="? Question ?"}
+What is the impact of the interpolation on the spectral analysis, when you interpolate to smaller sampling interval or higher sampling interval.
+
+In both cases, what are the pros and cons ?
+:::
+
+## Ouliers
+
+Outliers (datapoint differing from the main body of datapoints) can be problematic when applying time series analysis. Here are some way to detect those (function trim or trimAT, or delPts, see data preparation in @fig-map-astro).
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide  
+
+
+# outliers can be problematic they are different ways to remove them 
+
+# Automatically remove outliers from stratigraphic series, using 'boxplot' algorithm
+dataAND89_trim <- trim(dataAND89, genplot=F, verbose=F)
+
+# Remove outliers from stratigraphic series, using specified threshold value
+dataAND89_trimAT<-trimAT(dataAND89, thresh=8, dir=2, genplot=F, verbose=F)
+
+
+# We interpolate our newly created stratigraphic series
+dataAND89_i<-linterp(dataAND89, genplot=F, verbose=F)
+dataAND89_trimi<-linterp(dataAND89_trim, genplot=F, verbose=F)
+dataAND89_trimATi<-linterp(dataAND89_trimAT, genplot=F, verbose=F)
+
+# We do spectral analysis on those data and compare the different interpolations
+mtm_AND89_i <- mtm(dataAND89_i, output=1, genplot=F, verbose=F) 
+mtm_AND89_trimi <- mtm(dataAND89_trimi, output=1, genplot=F, verbose=F)
+mtm_AND89_trimATi <- mtm(dataAND89_trimATi, output=1, genplot=F, verbose=F)  
+
+
+# We plot the different MTM for easier comparison 
+plot(mtm_AND89_i$Frequency, mtm_AND89_i$Power, type='l', log = "y")
+lines(mtm_AND89_i$Frequency, mtm_AND89_i$AR1_95_power, lty=2)
+
+lines(mtm_AND89_trimi$Frequency, mtm_AND89_trimi$Power, col='purple')
+lines(mtm_AND89_trimi$Frequency, mtm_AND89_trimi$AR1_95_power, lty=2, col='purple')
+
+lines(mtm_AND89_trimATi$Frequency, mtm_AND89_trimATi$Power, col='darkturquoise')
+lines(mtm_AND89_trimATi$Frequency, mtm_AND89_trimATi$AR1_95_power, lty=2, col='darkturquoise')
+
+
+
+
+```
+
+::: {.callout-note title="? Question ?"}
+When we plot our mtm data, what is the difference between the data trimmed and without trimming ?
+
+What are the implications of the application of the log transform ?
+
+Are you sure that it is efficient in this case to remove the outliers ?
+:::
+
+## Detrending
+
+Now, we will compare different styles of detrending (see data preparation in @fig-map-astro).
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide  
+
+
+# Removal of linear detrending from stratigraphic series
+dataAND89_d <- detrend(dataAND89, genplot=T, verbose=F) 
+dataAND89_d2 <- detrend(dataAND89, genplot=F, output=2, verbose=F) 
+
+# Removal of lowess smoother from stratigraphic series
+dataAND89_nL <- noLow(dataAND89, smooth=0.2, genplot=T, output=1, verbose=F)
+dataAND89_nL2 <- noLow(dataAND89, smooth=0.2, genplot=F, output=2, verbose=F)
+
+# applying log allows to stabilize the variance AND89 linearize relationships to stabilize variance
+dataAND89_log<-logT(dataAND89, c=20, opt=2, genplot=T, verbose=F)
+
+
+plot(dataAND89, type='l', ylim=c(-10, 20))
+lines(dataAND89_d$Depth_m, dataAND89_d$Clasts-8, col='darkturquoise')
+lines(dataAND89_d2$X1, dataAND89_d2$X2, col='darkturquoise', lty=2, lwd=2)
+lines(dataAND89_nL$Depth_m, dataAND89_nL$Clasts+10, col='purple')
+lines(dataAND89_nL2$Depth_m, dataAND89_nL2$Clasts, col='purple', lty=2, lwd=2)
+lines(dataAND89_log$X1, dataAND89_log$X2+17, col='darkred')
+
+# The different datasets have been shifted for better visual 
+
+```
+
+::: {.callout-note title="? Question ?"}
+We plot our data and compare it with the different detrending, can you see what is the impact of "output" in the function noLow and detrend ?
+
+Can you also see how the parameter "smooth" changes how the smoothing is applied ?
+
+How do you compare these 3 techniques to remove the variances for our case study, which one works best and why ?
+:::
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide  
+
+
+# now we interpolate our detrended signals 
+dataAND89_i<-linterp(dataAND89, genplot=F, verbose=F)
+dataAND89_di<-linterp(dataAND89_d, genplot=F, verbose=F)
+dataAND89_nLi<-linterp(dataAND89_nL, genplot=F, verbose=F)
+dataAND89_logi<-linterp(dataAND89_log, genplot=F, verbose=F)
+
+# now let's do spectral analysis on those data and compare 
+mtm_AND89_i <- mtm(dataAND89_i, output=1, genplot=F, verbose=F) 
+mtm_AND89_di <- mtm(dataAND89_di, output=1, genplot=F, verbose=F) 
+mtm_AND89_nLi <- mtm(dataAND89_nLi, output=1, genplot=F, verbose=F) 
+mtm_AND89_logi <- mtm(dataAND89_logi, output=1, genplot=F, verbose=F) 
+
+
+
+plot(mtm_AND89_i$Frequency, mtm_AND89_i$Power, type='l', log = "y", 
+     ylim=c(5e-5, 5e-2), xlim=c(0, 1))
+lines(mtm_AND89_i$Frequency, mtm_AND89_i$AR1_95_power, lty=2)
+
+lines(mtm_AND89_di$Frequency, mtm_AND89_di$Power, col='darkturquoise')
+lines(mtm_AND89_di$Frequency, mtm_AND89_di$AR1_95_power, lty=2, col='darkturquoise')
+
+lines(mtm_AND89_nLi$Frequency, mtm_AND89_nLi$Power, col='purple')
+lines(mtm_AND89_nLi$Frequency, mtm_AND89_nLi$AR1_95_power, lty=2, col='purple')
+
+lines(mtm_AND89_logi$Frequency, mtm_AND89_logi$Power*1000, col='darkgreen')
+lines(mtm_AND89_logi$Frequency, mtm_AND89_logi$AR1_95_power*1000, lty=2, col='darkgreen')
+
+
+
+
+```
+
+::: {.callout-note title="? Question ?"}
+What is the impact of the different detrending on the outcome of the spectral analysis ?
+:::
+
+## Filtering
+
+Filtering a time series means removal of the spectral power at some chosen frequencies while retaining other frequencies. 
+
+A high-pass filter retains higher frequencies while removing low frequencies; a low-pass filter does the opposite.
+
+A band-pass filter removes all frequencies outside a prespecified band.
+
+Filtering can be done through different ways (see filtering in @fig-map-astro), including the classically used "bandpass" and "taner".
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide 
+
+# if we zoom on our MTM, we can identify two important cycles at low frequencies 
+mtm_AND89_i <- mtm(dataAND89_i, output=1, genplot=T, verbose=T, xmin=0, xmax=1) 
+
+#around 0.05 1/m (corresponding to 20 m) and around 0.25 1/m (corresponding to ~4 m). 
+# These two cycles have a ratios of 1/5 and have been interpreted respectively as short eccentricity and precession cycles. 
+
+# so we can filter those 
+filterAND89_005 <- bandpass(dataAND89_i, flow=0.04, fhigh=0.06)
+filterAND89_025 <- bandpass(dataAND89_i, flow=0.19, fhigh=0.31)
+
+# we also want to look at the enveloppe of the precession cycles. 
+# This is done through the Hilbert Transform 
+hilAND89_025 <- hilbert(filterAND89_025)
+
+dev.off()
+plot(dataAND89_i, type='l')
+lines(filterAND89_005$Depth_m, filterAND89_005$Clasts+10, col="purple", lwd=1.5)
+lines(filterAND89_025$Depth_m, filterAND89_025$Clasts+8, col="darkturquoise", lwd=1.5)
+lines(hilAND89_025$Depth_m, hilAND89_025$envelope+10, col="darkturquoise", lwd=1.5)
+
+```
+
+::: {.callout-note title="? Question ?"}
+The only way to identify the "true" phase relationship with the orbital cycles is to look at the amplitude modulation and not at the filter. So if you want to look at the variations of short eccentricity (locations of maxima and minima), you should look at the amplitude modulation of precession. If you want to look at long eccentricity at the modulation of short eccentricity and so on. In some cases, proxies can record the orbital cycles with an inverse phase relationship. 
+
+What is the phase relationship between the precession and short eccentricity cycles. Are they in-phase or out-of phase ? 
+You can check that if you look at the amplitude modulation of the precession and at the filter of the short eccentricity. 
+
+Can you identify were the maxima in short eccentricity are located ?
+:::
+
+
+Now we provide another dataset of CaCO3. 
+
+
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide 
+
+data(modelA)
+Mai<-linterp(modelA)
+dev.off()
+plot(Mai, type='l')
+MTM_MA<-mtm(Mai, output=1, siglevel=.8)
+
+# so we can filter those 
+filterMA_65 <- bandpass(Mai, flow=1/6.1, fhigh=1/6.9)
+filterMA_14 <- bandpass(Mai, flow=1/1.225, fhigh=1/2.125)
+filterMA_04 <- bandpass(Mai, flow=1/0.28, fhigh=1/0.37)
+
+# we also want to look at the enveloppe of the precession cycles. 
+# This is done through the Hilbert Transform 
+hilMA_14 <- hilbert(filterMA_14)
+hilMA_04 <- hilbert(filterMA_04)
+
+dev.off()
+plot(Mai, type='l', ylim=c(0, 120), xlim=c(0, 40))
+lines(filterMA_65$m, filterMA_65$CaCO3+78, col="purple", lwd=1.5)
+lines(filterMA_14$m, filterMA_14$CaCO3+55, col="darkturquoise", lwd=1.5)
+lines(hilMA_14$m, hilMA_14$envelope+93, col="darkturquoise", lwd=1.5)
+lines(filterMA_04$m, filterMA_04$CaCO3*2, col="darkorange", lwd=1.5)
+lines(hilMA_04$m, hilMA_04$envelope*2+75, col="darkorange", lwd=1.5)
+
+
+
+```
+
+::: {.callout-note title="? Question ?"}
+Can you do the same exercise. Can you identify the phase relationship ? is it the same or different ? how do you link the phrase relationship between orbital forcing with clasts and with CaCO3 ?
+::: 

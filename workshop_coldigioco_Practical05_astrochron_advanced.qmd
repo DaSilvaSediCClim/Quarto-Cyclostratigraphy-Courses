@@ -1,0 +1,215 @@
+---
+title: "Time-Series Analysis of Paleoclimate Signals – Practical 05"
+title-block-banner: "darkturquoise"
+subtitle: |
+  Advanced techniques on astrochron <br>
+  Coldigiocco Cyclonet Summer School 2025<br>
+  by C. Zeeden, M. Crucifix, A.C. Da Silva
+author: "Anne-Christine Da Silva"
+date: today
+bibliography: references.bib
+format:
+  html:
+    embed-resources: true
+    toc: true
+    toc-depth: 3
+    css: styles.css  # ← Link to your CSS file
+execute: 
+  cache: true
+---
+
+#	Astrochron advanced functions - introduction 
+
+Note: These ‘recipe’ should be taken with caution; they are given with very basic settings… and settings fitting with the studied data. We will also see that it can be chanllenging. Always go back to the original papers and learn to use those tools properly and not as black boxes. 
+
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide
+#| 
+
+library(astrochron)
+#setwd("D:/COMPUTER/FILES/ ")
+```
+
+
+For this practical, we selected data from the PETM-ETM2 Interval From the Walvis Ridge Transect, ODP Site 1262 (Leg 208). The ODP Leg 208 recovered late Paleogene strata from a depth transect across the Walvis Ridge and the adjacent Angola Basin (South Atlantic [@zachos2004a]. This archive has provided an invaluable record of the late Paleocene-early Eocene hyperthermal events, including comprehensive astrochronologies for the interval [@Lourens2005a; @westerholdDurationMagnet2007; @westerhold_TS_Controversy2012]]. @Lourens2005a developed astrochronologies from core material at ODP Sites 1262 and 1267 using magnetic susceptibility and L* (lightness) data. We will use here the a* (lightness data). 
+
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide
+
+# We extract a dataset from astrochron 
+DataA=getData("1262-a*")
+# We select some specific interval 
+DataisoA<-iso(DataA, xmin=117.62, xmax=139.22)
+```
+
+## Eha - Evolutive harmonic analysis (Meyers et al., 2001; Thomson, 1982) 
+Evolutive spectral analysis [@Meyers2001] have been already appraoched throught the Wavelet analysis in the practical on WaverideR. Evolutive Harmonic Analysis (eha) is a different type of evolutive technique and it is like applying MTM [@Thomson1982b] with a sliding window through our record. The eha has the disatvantage that it needs a specific window and so it would focus on specific frequencies, while the wavelet focuses on a larger range of frequencies. Furthermore, the eha as a "sliding technique" will always have the lower and upper part of the record trimmed. However, it has the advantage that the frequencies can be identified more specifically, while they are identified more roughly through the wavelet. 
+
+::: {.callout-caution collapse="false"}
+❗ This chunk must be run manually in an interactive R session, to open  a separated window 
+:::
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide
+
+# We interpolate our signal 
+DataA_i002 <- linterp(DataisoA)
+
+# We detrend our signal 
+DataA_d <- detrend(DataA_i002)
+
+# Our record is about 30 m, with sampling interval of 0.02
+# Perform Evolutive Harmonic Analysis using 2pi Slepian tapers,
+# a window of 8 meters, pad to 1000 points,
+# and output Harmonic F-test confidence level results
+eha_A <- eha(DataA_d, win = 7, pad = 1000, step = 0.018, output = 4, fmax = 3)
+
+# Now let's test the impact of trimming on the EHA 
+DataAT <- trim(DataisoA)
+
+# We interpolate our trimmed signal 
+DataAT_i <- linterp(DataAT)
+
+# Re-run EHA on trimmed data
+eha_A <- eha(DataAT_i, win = 7, pad = 1000, step = 0.018, output = 4, fmax = 3)
+
+```
+
+::: {.callout-note title="? Question ?"}
+Check every parameter in the function mostly "win", "output" and fmax, what is the implication of changes on those parameters ? 
+What is the impact of the trim function on the results of the eha for this specific record and why ? 
+:::
+
+
+## ASM - Average Spectral Misfits (Meyers and Sageman, 2007) or on the danger of applying a technique blindly 
+The Average Spectral Misfits provides an objective estimate of the optimal sedimentation rate for a stratigraphic interval that preserves a record of orbital forcing. The technique also provides a formal statistical test for rejecting the null hypothesis (no orbital signal). See [@Meyers2007a]
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide
+
+# We interpolate to 0.02 or to 0.05
+DataA_i002<-linterp(DataisoA)
+DataA_i005<-linterp(DataisoA, dt=0.05)
+
+
+# Calculate MTM spectrum using 2pi Slepian tapers, include AR1 condfidence level estimates, and plot power with linear scale
+mtm_A002=mtm(DataA_i002,tbw=2,ar=TRUE,pl=2, output=1, genplot=T)
+mtm_A005=mtm(DataA_i005,tbw=2,ar=TRUE,pl=2, output=1, genplot=T)
+
+# To identify the peaks you think are significant, you can select those manually in R (not in Quarto). Be careful to select them from the lowest frequency to the highest frequency) :
+# freqs=idPts(mtm_MM$Frequency, dat2=mtm_MM$Power, logx=F, logy=T, plotype=1, annotate=1, output=1, verbose=T)
+# freqs<-data.frame(Freq_id)
+
+#The selection and also be automated with with MTM set on output=2 
+freq_mtm002 <- mtm(DataA_i002,tbw=2,ar=TRUE,pl=2, output=2)
+freq_mtm005 <- mtm(DataA_i005,tbw=2,ar=TRUE,pl=2, output=2)
+
+# please note that to extract frequencies you can also use other functions such as lowspec (the outcome might be different)
+
+# Conduct ASM testing on these peaks
+# set Rayleigh frequency in cycles/m 
+# when you do an MTM, some text is provided in the R window, which includes the Rayleigh # and Nyquist frequency that you can just copy past and include down there 
+rayleigh=0.04638219   
+# set Nyquist frequency in cycles/m (of course if the interpolation is different, the Nyquist frequency will be different)
+nyquist_002=25
+nyquist_005=10
+
+
+# set orbital target in 1/ky if you work in deep time (e.g. 55 Myr) you can find it through : 
+bergerPeriods(55)
+#So you can write : 
+target=c(1/405.47, 1/126.98, 1/96.91, 1/39.79, 1/22.57, 1/18.77)
+
+# execute ASM and includes realistic lower boundary and upper boundary for sedimentation rates
+asm_mtm002<- asm(freq=freq_mtm002, target=target, rayleigh=rayleigh, nyquist=nyquist_002, sedmin=0.5, sedmax=3)
+
+asm_mtm005<- asm(freq=freq_mtm005, target=target, rayleigh=rayleigh, nyquist=nyquist_005, sedmin=0.5, sedmax=3)
+
+```
+::: {.callout-note title="? Question ?"}
+So you can see that depending on the interpolation, the outcome is different, do you identify why ?
+:::
+
+## TimeOpt (Meyers, 2015)
+The TimeOpt technique identifies the time scale that simultaneously optimizes eccentricity amplitude modulation of the precession band, and the concentration of power at precession (carrier) and eccentricity (modulator) frequencies [@Meyers2015c]. 
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide
+
+
+## TimeOpt 
+# the function requires to define the target E and the target P that should be modulated by target E. 
+targetE=c(130.7, 1/126.98, 1/96.91)
+
+
+# Estimate precession periods between 53-56 Myr (for target)
+p=etp(tmin=53000,tmax=56000,dt=5,eWt=0,oWt=0,pWt=1,esinw=T)
+eha(p,win=3000,sigID=T,fmin=0.02,fmax=0.07,pad=6000)
+
+# Define the target periods
+targetPL=c(23.04147,21.81818,18.56436) #estimated by Laskar
+
+bergerPeriods(55)
+targetPB=c(22.57,18.77) #estimated by Berger
+
+
+# now we have defined everything needed and we only have to estimate a max sedimentation rate and a min sedimentation rate. 
+timeOpt_002PL<-timeOpt(DataA_i002, sedmin=0.5, sedmax=3,  targetE=targetE,  targetP=targetPL, numsed=100,  fit=1,  output=1)
+timeOpt_002PB<-timeOpt(DataA_i002, sedmin=0.5, sedmax=3,  targetE=targetE,  targetP=targetPB, numsed=100,  fit=1,  output=1)
+
+timeOpt_005PL<-timeOpt(DataA_i005, sedmin=0.5, sedmax=3,  targetE=targetE,  targetP=targetPL, numsed=100,  fit=1,  output=1)
+timeOpt_005PB<-timeOpt(DataA_i005, sedmin=0.5, sedmax=3,  targetE=targetE,  targetP=targetPB, numsed=100,  fit=1,  output=1)
+
+```
+
+
+::: {.callout-note title="? Question ?"}
+The outcome is again different from ASM and is different depending how you define the P frequencies. How would you test which solution is best ?
+:::
+
+
+## Transformation of your signal into the time domain 
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide
+
+# Transformation in the time domain 
+# Once you have an interpretation you can transform your signal from the distance domain (m) to the time domain (kyr)
+# They are different ways to do so…
+
+# (1) Tuning through a constant sedimentation rate (in the same unit as the data)
+DataA_i005_Tuned<-constantSedrate(DataA_i005, 0.013) 
+
+# (2) use the outcome of TimeOpt (output=2) 
+Tuned_DataA_timeOpt_005PL<-timeOpt(DataA_i005, sedmin=0.5, sedmax=3,  targetE=targetE,  targetP=targetPL, numsed=100,  fit=1,  output=2)
+
+# (3) Tuning through control points 
+# controlPts	- Tuning control points. A data frame or matrix containing two columns: depth, time (for example with points that you interpret as minima in long eccentricity, first column will be the altitude of those minima, second column would be 405, 810, etc. )
+# tune(dat, controlPts, extrapolate=F, genplot=T, check=T, verbose=T) 
+
+# (4) Tuning through a tracked defined cycle
+### see function trackFreq, which should be applied manually (outside of Quarto), followed by freq2sedrate, then sedrate2time 
+
+```
+
+### References
+
+::: {#refs}
+:::

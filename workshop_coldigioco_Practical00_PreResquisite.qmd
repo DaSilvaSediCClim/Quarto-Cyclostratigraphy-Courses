@@ -1,0 +1,156 @@
+---
+title: "Time-Series Analysis of Paleoclimate Signals – Practical 00 - Prerequisites"
+title-block-banner: "darkturquoise"
+subtitle: |
+  Coldigiocco Cyclonet Summer School 2025<br>
+  by C. Zeeden, M. Crucifix, A.C. Da Silva
+author: "Anne-Christine Da Silva"
+date: today
+bibliography: references.bib
+format:
+  html:
+    embed-resources: true
+    toc: true
+    toc-depth: 3
+    css: styles.css  # ← Link to your CSS file
+execute: 
+  cache: true
+---
+
+# Introduction
+
+Here are the essential prerequisites for the workshop "Time-series analysis in R" in Coldigiocco, Italy.
+
+Why R ? programming language designed for statistical computing and graphics, open source and free. So, this is ideal for reproducibility and fair science. R is composed of packages (more than 22 000), which are all dedicated to different tasks. They are all open sources, so you can check how they have been done and you can re-use part of them to build new packages. A large part of the cyclostratigraphic community uses R spectral analysis, statistical analysis and plotting.
+
+## Learning goals
+
+The learning goals for this practical are
+
+-   Getting some basic syntaxt for R beginners\
+-   Getting to know the available software packages for cyclostratigraphy in R
+-   Understand the syntax and model assumptions of the software packages
+-   Get a better understanding of the application of these techniques
+-   Be able to starting doing basic spectral analysis on proxy records with known interpretations first and then work with your own data.
+
+::: callout-warning
+It is essential that everyone, mostly beginners have everything installed on their computer before the practical workshop (programs and packages below). If not, this could cause strong delay. So, if you cannot install all the dependencies or if you are not sure you did, please ask us on the first day of the workshop.
+:::
+
+This workshop is designed for beginners and more advanced researchers. The course has been divided into 5 parts and beginners might do only parts 01 to 03, while more advanced researchers could do parts 02 to 05.
+
+-   **Part 01 - Introduction to R and R studio** - For those needing it, an introduction of some of the basic functions in R and R studio are provided.
+
+-   **Part 02 - Astrochron** [@meyersAstrochron2014] - is a computational platform for conducting and learning about (1) paleoclimate time series analysis; (2) astronomical time scale construction and (3) statistical integration of astrochronologies with other geochronologic/chronostratigraphic data.
+
+-   **Part 03 - Introduction to StratigrapheR** [@WoutersStratigrapheR2018] - which includes bases for litholog generation: graphical functions based on R base graphics, interval management functions and svg importation functions among others.
+
+-   **Part 04 - WaverideR** [@ArtsWaverideR2023] allows to apply the continuous wavelet transform on cyclostratigraphic data series to observe and extract cyclic signals/signatures to construct astrochronological age-models and identify and interpret cyclicity in past and present climate systems.
+
+-   **Part 05 - Astrochron Advanved techniques** [@meyersAstrochron2014] - more advanced techniques in astrochron (ASM, eha, TimeOpt, etc.).
+
+::: {.callout-tip title="Tip on this practical"}
+You can either open the html file and copy each window into R (there is a copy past button), but the easiest might be to open the Quarto (.qmd) file into R and then you can run each chunck directly into R.
+:::
+
+## How to install R and RStudio ?
+
+It is important to have the latest version of R, so please upgrade if you have an older version.
+
+(1) Download R from http://www.r-project.org
+
+• Select a CRAN mirror site, then you will come to the download page.
+
+• Download the most recent ‘precompiled binary’ (top of the webpage)
+
+NOTE: for Windows, this binary will be located in the directory ‘base’
+
+(2) Click on the downloaded file to install, and follow the instructions.
+
+When installing, use all defaults.
+
+(3) Download and install Rstudio. https://www.rstudio.com/products/rstudio/download/
+
+::: {.callout-tip title="Tip on R Studio"}
+RStudio's interface is structured into four main panes: the Source pane, Console pane, Environment/History pane, and the Output pane. These panes provide distinct functionalities for coding, running commands, managing variables, and accessing various tools.
+
+Here's a more detailed breakdown:
+
+1.  Source Pane (top-left): This is where you write and edit your R code. It supports syntax highlighting, code completion, and other features to enhance coding efficiency.
+
+2.  Console Pane (bottom-left): This is the interactive command-line interface where you can type R commands directly and see the results. It's where R executes your code and displays output.
+
+3.  Environment/History Pane (top-right): This pane is divided into two main tabs:
+
+    Environment: Displays the variables and objects that are currently loaded in your R session. History: Keeps a record of all the commands you've executed in the console.
+
+4.  Output Pane (bottom-right): This pane provides access to various tools and information, typically including:
+
+    Files: Displays the files and directories within your current working directory. Plots: Shows any plots you've generated during your R session. Packages: Helps manage installed R packages, allowing you to install, update, or load them. Help: Provides access to the extensive R documentation and help files. Viewer: Displays local web content generated by R.
+:::
+
+## Package installation
+
+::: {.callout-tip title="Tip on R and packages"}
+R includes a lot of *packages* dedicated to specific statistical aspects and graphic design. In those packages they are *functions* to make specific tasks and in those functions they are *arguments* to tell R how to do a specific task. For example you can use the ggplot package to make plots, with a specific function to make scatter plot and a specific argument to make your dots red or to change the legend.
+
+When you want to use a package you should first install it (install.packages(package_name)) and then load the package (library(package_name))
+:::
+
+To install the packages needed for the summer school, run the following code in R:
+
+```{r}
+#| eval: false
+
+install.packages("WaverideR")
+install.packages("DecomposeR")
+install.packages("DescTools")
+install.packages("Hmisc")
+install.packages("Matrix")
+install.packages("utils")
+install.packages("colorednoise")
+install.packages("doSNOW")
+install.packages("fANCOVA")
+install.packages("foreach")
+install.packages("stats")
+install.packages("tcltk")
+install.packages("matrixStats")
+install.packages("reshape2")
+install.packages("truncnorm")
+install.packages("grDevices")
+install.packages("graphics")
+install.packages("parallel")
+install.packages("biwavelet")
+install.packages("WaveletComp")
+install.packages("StratigrapheR")
+install.packages("WaverideR")
+install.packages("astrochron") 
+install.packages("WaverideR")
+install.packages(c("multitaper", "IDPmisc", "fields", "doParallel", "iterators", "foreach"))  
+
+
+```
+
+
+
+```{r}
+#| eval: false
+install.packages("devtools")
+install_git("https://forge.uclouvain.be/mcrucifix/tseries.git")
+
+```
+
+Dependencies should be installed automatically, and some (Rcpp) may take a while. 
+
+
+
+## Getting help
+
+::: {.callout-tip title="Tip on R and help"}
+If you type ? astrochron in the console pane or astrochron in the help pane, you will reach the documentation related to astrochron. If you go down the page, at the very bottom, you will see a name "Index" which is a link to all the functions and arguments of astrochron.
+:::
+
+### References
+
+::: {#refs}
+:::

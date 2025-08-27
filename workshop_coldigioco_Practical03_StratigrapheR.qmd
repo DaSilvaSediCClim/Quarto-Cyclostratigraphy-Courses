@@ -1,0 +1,240 @@
+---
+title: "Time-Series Analysis of Paleoclimate Signals – Practical 03"
+title-block-banner: "darkturquoise"
+subtitle: |
+  Basics on StratigrapheR<br>
+  Coldigiocco Cyclonet Summer School 2025<br>
+  by C. Zeeden, M. Crucifix, A.C. Da Silva
+author: "Anne-Christine Da Silva"
+date: "2025-07-03"
+format:
+  html:
+    embed-resources: true
+    toc: true
+    toc-depth: 3
+    css: styles.css  # ← Link to your CSS file
+execute: 
+  cache: true
+---
+
+
+# StratigrapheR
+
+Stratigrapher allows you to build lithologs and to plot your log on the side of your proxies and of your spectral analysis results (Wouters et al., 2021).
+
+![StratigrapheR - how to cite it](StratigrapheR_01.png){fig-align="center"}
+
+![StratigrapheR - Stratigrapher plotting with magnetochron, color, sample position and another example with specific fossils on the side and magnetic susceptibility evolution.](StratigrapheR_02.png)
+
+For further features, type ?StratigapheR, you will have a complete script which includes most functions of StratigrapheR.
+
+## StratigrapheR loading and dataframe structure
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide
+
+library(StratigrapheR) 
+
+# and we also load a very useful package, used here for joining data frames 
+library(dplyr)
+
+```
+
+::: {.callout-tip title="Tip on the dataset needed to build a litholog in StratigrapheR"}
+Bed dataset ----
+
+this dataset should include the description of each bed with :
+
+\- l - the position of the base of each bed (in cm or m) - l stands for the left side or boundary of an interval-
+
+\- r - the position of the top of each bed (in cm or m) - r stands for the right side or boundary of an interval-
+
+\- litho - the lithology, basics are for instance C for chert, S for shale, L for limestone... but you can include anything you want in any way you want
+
+\- h - relief or hardness of each bed
+
+\- id - is the bed identification, number (e.g. B1, B2, ...)
+
+you can also include other columns with anything else you find useful for each bed such as color or lithofacies
+:::
+
+![Structure of the dataframe to build a litholog in StratigrapheR](StratigrapheR_03.png){fig-align="center" width="569"}
+
+## Building a litholog
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide
+
+# You may want to change your working directory for this, the example will generate .pdf and .txt files;
+# setwd()
+setwd("C:/Users/Anne-Christine/Documents/ANNECHRI2/POST/UTRECHT/Spectral ANALYSIS/StratigrapheR" )
+
+
+# Once we have created our file we import our data 
+Log <- read.csv("log_entier_8.csv")
+
+# StratigrapheR will take the basic data (l, r, h, id)
+
+basic.log <- litholog(l = Log$l, r = Log$r, h = Log$h, i = Log$id)
+
+# then we define the legend for each lithology ----
+
+# for each lithology you can provide a color (col), a density of shading (density) and orientation for the lines (angle)
+
+legend.Ch <- data.frame(litho = c("StC","S","DS","BS","StS", "CSt", "C", "M"),
+                        col = c("burlywood", "bisque4", "grey40", "grey20", "antiquewhite3", "darkslategray", "azure2", "azure4"),
+                        density = c(0,10,20,10,0,  10, 0,0),
+                        angle = c(45, 180,180,180,180, 90, 0,0), stringsAsFactors = FALSE)
+
+bed.legend <- left_join(Log,legend.Ch, by = "litho")
+
+# Prepare plot title("MyLog")
+whiteSet(xlim = c(0,6), ylim = c(0,52), ytick = 5, ny = 5) 
+
+# Then, we add the polygons making the litholog. This is done with a single function identifying each polygon by the id of points. The graphical parameters of the polygons can be adapted to fit the legend, polygon by polygon.
+
+multigons(basic.log$i, x = basic.log$xy, y = basic.log$dt,
+          col = bed.legend$col, density = bed.legend$density,
+          angle = bed.legend$angle)
+
+
+```
+
+## Creating a hardness curve evolution.
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide
+
+# We can Create a record from the hardness profile ----------------
+
+# We create a vector of evenly spaced values between min and max depth values
+
+# You can define the sampling rate if you modify the parameter "by = 0.02" with the interpolation you want.
+
+sampling <- seq(from = min(Log$l), to = max(Log$r), 
+                by = 0.02) 
+
+hardness <- vector(mode = "numeric", length = length(sampling))
+
+# extract hardness values from the sorted file data according to sampling depth
+
+index <- 1 
+for( i in 1:(length(sampling)) ) 
+  { 
+  if( sampling[i] > Log$r[index] )
+    index <- index + 1
+  hardness[i] = Log$h[index]
+  }
+
+# at this point just check that the index value should point to the end of the file because it should
+
+stopifnot(index == nrow(Log))
+
+h<- cbind(sampling, hardness) 
+hard<-as.data.frame(h) 
+plot(hard, type='l')
+
+
+
+```
+
+## Creating a facies curve evolution
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide
+
+# We can Create a record from the facies evolution ----------------
+
+# we create a new column (called lithonumber), the code name for each facies is replaced by a facies number 
+
+lithtonum = c("StC"=4,"S"=2,"DS"=1.5,"BS"=1,"StS"=2.2, "CSt"=4, "C"=4, "M"=3)
+
+for ( litho_name in names(lithtonum)) { 
+  Log$lithonumber[Log$litho == litho_name] = lithtonum[litho_name] }
+
+if( is.unsorted(Log$r, strictly = FALSE) )
+  Log <- Log[order(Log$r),]
+
+# create a vector of evenly spaced values between min and max depth values
+
+# to replace sampling rate, replace by = 0.02 by the interpolation you want.
+
+sampling <- seq(from = min(Log$l), to = max(Log$r), by = 0.02) 
+
+facies <- vector(mode = "numeric", length = length(sampling))
+
+# extract facies values from the sorted file data according to sampling depth
+
+index <- 1 
+for( i in 1:(length(sampling)) ) { 
+  if( sampling[i] > Log$r[index] )
+    index <- index + 1
+  facies[i] = Log$lithonumber[index] 
+}
+
+# at this point just check that the index value should point to the end of the file because it should
+
+stopifnot(index == nrow(Log))
+
+f<- cbind(sampling, facies) 
+facies<-as.data.frame(f) 
+plot(facies, type='l')
+
+
+```
+
+## Plotting litholog with proxies
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide
+
+
+#First we create a matrix with 3 column, one for our log, one for hardness and one for facies 
+layout(matrix(c(1, 2, 3), 
+              nrow = 1, 
+              ncol = 3),
+       heights = c(1),    		# Heights of the row
+       widths = c(1, 1, 1))  	# Width of the columns
+par(yaxs="i")
+# set the y axis (if you want to see the whole record or to zoom on some part, you can change that here)
+ylim=c(0,52)
+# here you can set the graduations 
+ytick = 1
+
+# we create the first column, through "par" we set the size of the margins: c(bottom, left, top, right)
+par(mar=c(2, 1, 2, 0.2))
+whiteSet(xlim = c(0, 6), ylim = ylim, ytick = ytick, ny = 1) # Prepare plot
+multigons(basic.log$i, x = basic.log$xy, y = basic.log$dt,
+          col = bed.legend$col,
+          density = bed.legend$density,
+          angle = bed.legend$angle) # include log 
+
+# we create the second column
+par(mar=c(2, 1, 2, 0.2))
+plot(hard$hardness, hard$sampling, type='l', col='darkblue', axes=FALSE, frame.plot=TRUE, ylim=ylim)
+axis(side=1)
+Axis(side=2, labels=FALSE, tick=FALSE, line=FALSE)
+legend("bottomleft", "Hardness", cex=1.5, bty="n", text.col = "black")
+
+# we create the third column
+par(mar=c(2, 1, 2, 0.2))
+plot(facies$facies, facies$sampling, type='l', col='darkgreen', axes=FALSE, frame.plot=TRUE, ylim=ylim)
+axis(side=1)
+Axis(side=2, labels=FALSE, tick=FALSE, line=FALSE)
+legend("bottomright", "Facies", cex=1.5, bty="n", text.col = "black")
+
+```

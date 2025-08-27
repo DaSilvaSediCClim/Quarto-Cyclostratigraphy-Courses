@@ -1,0 +1,288 @@
+---
+title: "Time-Series Analysis of Paleoclimate Signals – Practical 04"
+title-block-banner: "darkturquoise"
+subtitle: |
+  Basics on WaverideR <br>
+  Coldigiocco Cyclonet Summer School 2025<br>
+  by C. Zeeden, M. Crucifix, A.C. Da Silva
+author: "Michiel Arts & Anne-Christine Da Silva"
+date: today
+bibliography: references.bib
+format:
+  html:
+    embed-resources: true
+    toc: true
+    toc-depth: 3
+    css: styles.css  # ← Link to your CSS file
+execute: 
+  cache: true
+---
+
+
+# WaverideR
+
+### Install WaverideR
+The 'WaverideR' [@ArtsWaverideR2023] R package is available on CRAN. However, if you have any problems with installing the 'WaverideR' R package please send and email to (mailto:michiel.arts@stratigraphy.eu). An application of the package and documentation (see supplementary material) can be found in [@Arts_Cellon_2024]. 
+
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide  
+
+library(WaverideR)
+```
+
+## WaverideR on Magnetic susceptibility Devonian dataset (Sullivan Core) 
+
+In the next exercise we will look at part of the magnetic susceptibility data set of [@Pas2018] from the Sullivan Core.
+The core principally consists of shales which were deposited in the the Illinois basin (USA) during the  the Fammenian (late Devonian)
+
+For more background information please read:
+Damien Pas, Linda Hinnov, James E. (Jed) Day, Kenneth Kodama, Matthias Sinnesael, Wei Liu, Cyclostratigraphic calibration of the Famennian stage (Late Devonian, Illinois Basin, USA), Earth and Planetary Science Letters, Volume 488, 2018, Pages 102-114, ISSN 0012-821X, doi:<doi:10.1016/j.epsl.2018.02.010>
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide  
+
+# Those data are embedded into WaverideR
+#plot the data
+plot(mag,type="l",xlab="depth (metres)",ylab="magnetic sucept")
+```
+
+
+A wavelet is truncated sine waves with N number of cycles contained within just like a windowed Fast Fourier analysis like the EHA function of 'astrochron' is is possible to track changing periods in the depth domain
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide  
+
+
+#Do the wavelet analysis
+mag_wt <-
+  analyze_wavelet(
+    data = mag,
+    dj = 1/100,
+    lowerPeriod = 0.1,
+    upperPeriod = 256,
+    verbose = FALSE,
+    omega_nr = 10
+  )
+#plot the wavelet analysis
+
+plot_wavelet(
+  wavelet = mag_wt,
+  n.levels = 100,
+  palette_name = "rainbow",
+  color_brewer = "grDevices",
+  useRaster = TRUE,
+  periodlab = "Period (metres)",
+  x_lab = "depth (metres)",
+  keep_editable = FALSE,
+  dev_new = FALSE,
+  plot_dir = TRUE,
+  add_lines = NULL,
+  add_points = NULL,
+  add_abline_h = NULL,
+  add_abline_v = NULL,
+  add_MTM_peaks = FALSE,
+  add_data = TRUE,
+  add_avg = FALSE,
+  add_pval = FALSE,
+  pval_abline = c(0.1, 0.05),
+  pval_cutoff = c(0.1),
+  add_MTM = FALSE,
+  mtm_siglvl = 0.95,
+  demean_mtm = TRUE,
+  detrend_mtm = TRUE,
+  padfac_mtm = 5,
+  tbw_mtm = 3,
+  plot_horizontal = TRUE
+)
+
+#plot the average wavelet spectra
+plot_avg_wavelet(wavelet=mag_wt,
+                 y_lab= "power",
+                 x_lab="period (metres)",
+                 keep_editable=TRUE)
+```
+
+::: {.callout-tip title="Tip on WaverideR plotting"}
+Classically when working in R, the function dev_new is set to TRUE, which means that R opens a new plotting window to plot the plot, this guarantees a "nice" looking plot. However when running an R Quarto chunck, to allow plotting it needs to be set to dev_new = FALSE; but the plots are of lower quality. If you transfer this code to R, set dev_new to TRUE. 
+:::
+
+
+We can see some spectra power with a period of 2-4 m, which according to [@Pas2018] is the 405kyr eccentricity cycle. The period in Kyr of this cycle is very stable and thus we can use this cycle to create an Age model. 
+
+We can  track the band of high spectral power in the wavelet spectra, with the track_period_wavelet" function, allowing to track the ~3 m long eccentricity cycle in the Wavelet spectra. 
+
+
+## Tracking a specific cycle in WaverideR
+
+::: {.callout-tip title="Tip on WaverideR tracking"}
+For this specific code, it cannot work in Quarto, so it is better to copy paste the code in R and to run it separately. For this reason, it is not included into a chunck. 
+:::
+
+::: {.callout-caution collapse="false"}
+❗ This  code  must be run manually in an interactive R session
+It requires selecting points interactively
+
+### 1. Perform the tracking (manual step)
+
+mag_track <- track_period_wavelet(
+  astro_cycle = 405,
+  wavelet = mag_wt,
+  n.levels = 100,
+  periodlab = "Period (metres)",
+  x_lab = "depth (metres)"
+)
+
+### 2. Complete the tracked curve
+mag_track_complete <- completed_series(
+  wavelet = mag_wt,
+  tracked_curve = mag_track,
+  period_up = 1.25,
+  period_down = 0.75,
+  extrapolate = TRUE,
+  genplot = FALSE
+)
+
+### 3. Plot the re-tracked curve
+plot(mag_track_complete, type = "l")
+
+### 4. Smooth the curve
+mag_track_complete <- loess_auto(
+  time_series = mag_track_complete,
+  genplot = FALSE,
+  print_span = FALSE,
+  keep_editable = FALSE
+)
+
+### 5. Plot the smoothed curve
+plot(mag_track_complete[, 1], mag_track_complete[, 2], type = "l")
+
+### 6. Overlay the smoothed curve on the wavelet spectra
+plot_wavelet(
+  wavelet = mag_wt,
+  n.levels = 100,
+  palette_name = "rainbow",
+  useRaster = TRUE,
+  periodlab = "Period (metres)",
+  x_lab = "depth (metres)",
+  keep_editable = TRUE
+)
+lines(mag_track_complete[, 1], log2(mag_track_complete[, 2]), lwd = 2)
+
+:::
+
+We can then extract the tuned 405 kyr eccentricity cycle from the wavelet spectrum and use the extract_signal function, setting the tracked_cycle_ curve and set factors of the extracted cycle as boundaries_period to the interpreted duration of the tracked cycle (in this case 405 kyr)
+
+
+## Check the amplitude of the extracted signal
+
+::: {.callout-caution collapse="false"}
+❗ This chunk must be run manually in an interactive R session
+It requires previously done analysis
+
+mag_405_ecc  <- extract_signal(
+  tracked_cycle_curve = mag_track_complete,
+  wavelet = mag_wt,
+  period_up = 1.2,
+  period_down = 0.8,
+  add_mean = TRUE,
+  tracked_cycle_period = 405,
+  extract_cycle = 405,
+  tune = FALSE,
+  plot_residual = FALSE
+)
+
+plot(mag, type='l')
+lines(mag_405_ecc[,1],mag_405_ecc[,2]-2, col='red')
+::: 
+
+We have applied -2 to switch the tracked cycle a little bit down for better vizualisation. 
+
+
+## Conversion of the record from the depth to the time domain
+
+::: {.callout-caution collapse="false"}
+❗ This chunk must be run manually in an interactive R session
+It requires previously done analysis
+
+mag_time<- curve2tune(data=mag,
+                            tracked_cycle_curve=mag_track_complete,
+                            tracked_cycle_period=405,
+                            genplot=TRUE,
+                            keep_editable=FALSE)
+
+mag_wt_time <-
+  analyze_wavelet(
+    data = mag_time,
+    dj = 1/100,
+    lowerPeriod = 25,
+    upperPeriod = 3500,
+    verbose = FALSE,
+    omega_nr = 10
+  )  
+
+
+plot_wavelet(
+  wavelet = mag_wt_time,
+  n.levels = 100,
+  palette_name = "rainbow",
+  dev_new = FALSE,
+  useRaster = TRUE,
+  periodlab = "Period (metres)",
+  x_lab = "depth (metres)",
+  keep_editable=FALSE
+) #plot the magnetic suceptibility data in a wavelet in the time domain
+
+
+plot_avg_wavelet(wavelet=mag_wt_time,
+                 y_lab= "power",
+                 x_lab="period (years)",
+                 keep_editable=TRUE)
+abline(v=405) #peak of the 405kyr eccentricity cycle
+abline(v=100) #peak of the 100kyr eccentricity cycle
+:::
+
+## Extract cycles in the time domain 
+
+::: {.callout-caution collapse="false"}
+❗ This chunk must be run manually in an interactive R session
+It requires previously done analysis
+
+
+ecc_405 <- extract_signal_stable(
+  wavelet = mag_wt_time,
+  cycle = 405,
+  period_up = 1.2,
+  period_down = 0.8,
+  add_mean = TRUE,
+  plot_residual = FALSE,
+  keep_editable = FALSE
+) #extract the 405 kyr cycle
+
+
+
+ecc_100 <- extract_signal_stable(
+  wavelet = mag_wt_time,
+  cycle = 100,
+  period_up = 1.2,
+  period_down = 0.8,
+  add_mean = TRUE,
+  plot_residual = FALSE,
+  keep_editable = FALSE
+) #extract the 100 kyr eccentricity cycle
+
+
+plot(mag_time,type="l") #plot the original data
+lines(ecc_100,col="blue") #plot the short (100 kyr) eccentricity cycle
+lines(ecc_405,col="red")#plot the long (405 kyr) eccentricity cycle
+
+::: 
