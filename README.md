@@ -1,7 +1,7 @@
 # Quarto-Cyclostratigraphy-Courses
-This include multiple courses on cyclostratigraphy on R going step by step (Basic R, astrochron, WaverideR, StratigrapheR, advanced astrochron)
+This repository includes different courses on cyclostratigraphy on R.
 
-This workshop is designed for beginners and more advanced researchers. The course has been divided into 5 parts and beginners might do only parts 01 to 03, while more advanced researchers could do parts 02 to 05.
+This course was designed for a Cyclonet Workshop in Coldigioco Italy on cyclostratigraphy for beginners and more advanced researchers. Part 00 corresponds to the prerequisites (how to install R, what's in the course, requested packages) and should be run prior to all the others. The course has been divided into 5 parts and beginners might do only parts 01 to 03, while more advanced researchers could do parts 02 to 05. 
 
     Part 01 - Introduction to R and R studio - For those needing it, an introduction of some of the basic functions in R and R studio are provided.
 
@@ -13,7 +13,9 @@ This workshop is designed for beginners and more advanced researchers. The cours
 
     Part 05 - Astrochron Advanved techniques (Meyers 2014) - more advanced techniques in astrochron (ASM, eha, TimeOpt, etc.).
 
-You can either open the html file and copy each window into R (there is a copy past button), but the easiest might be to open the Quarto (.qmd) file into R and then you can run each chunck directly into R.
+The repository includes multiples files, you would need mostly the .html or .qmd files. You can either open the html files on your browser and copy each code chunck into R (there is a copy past button for each code chunck), or you can directly open the Quarto (.qmd) file into RStudio and then you can run each chunck directly into R.
+
+
 How to install R and RStudio ?
 
 It is important to have the latest version of R, so please upgrade if you have an older version.
