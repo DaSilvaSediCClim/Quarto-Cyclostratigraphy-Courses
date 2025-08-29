@@ -1,0 +1,15 @@
+/* Change banner text color */
+.quarto-title-block .quarto-title h1,
+.quarto-title-block .quarto-title h2,
+.quarto-title-block .quarto-title h3,
+.quarto-title-block .quarto-title-author,
+.quarto-title-block .quarto-title-affiliation,
+.quarto-title-block .quarto-title-date {
+  color: navy;
+}
+
+/* Change color of the subtitle and everything inside it */
+.quarto-title-block .subtitle,
+.quarto-title-block .subtitle * {
+  color: navy;
+}
