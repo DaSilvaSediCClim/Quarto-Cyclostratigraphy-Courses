@@ -38,3 +38,5 @@ When installing, use all defaults.
 
 
 Once it has been installed, you can run the Quarto files, from 00, 01, ... to 05. 
+
+Have fun
