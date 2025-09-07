@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Anne-Christine Da Silva">
-<meta name="dcterms.date" content="2025-08-11">
+<meta name="dcterms.date" content="2025-09-07">
 
-<title>Time-Series Analysis of Paleoclimate Signals – Practical 05</title>
+<title>Time-Series Analysis of Paleoclimate Signals – Practical 05 - Advanced techniques on astrochron</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -3112,8 +3112,8 @@ background: darkturquoise;
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Time-Series Analysis of Paleoclimate Signals – Practical 05</h1>
-            <p class="subtitle lead"></p><p>Advanced techniques on astrochron <br> Coldigiocco Cyclonet Summer School 2025<br> by C. Zeeden, M. Crucifix, A.C. Da Silva</p><p></p>
+      <h1 class="title">Time-Series Analysis of Paleoclimate Signals – Practical 05 - Advanced techniques on astrochron</h1>
+            <p class="subtitle lead"></p><p>Coldigiocco Cyclonet Summer School 2025<br></p><p></p>
                       </div>
   </div>
     
@@ -3130,11 +3130,19 @@ background: darkturquoise;
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">August 11, 2025</p>
+        <p class="date">September 7, 2025</p>
       </div>
     </div>
     
       
+      <div>
+      <div class="quarto-title-meta-heading">Doi</div>
+      <div class="quarto-title-meta-contents">
+        <p class="doi">
+          <a href="https://doi.org/https://doi.org/10.5281/zenodo.17020808">https://doi.org/10.5281/zenodo.17020808</a>
+        </p>
+      </div>
+    </div>
     </div>
     
   
@@ -3146,10 +3154,11 @@ background: darkturquoise;
   <ul>
   <li><a href="#astrochron-advanced-functions---introduction" id="toc-astrochron-advanced-functions---introduction" class="nav-link active" data-scroll-target="#astrochron-advanced-functions---introduction">Astrochron advanced functions - introduction</a>
   <ul class="collapse">
-  <li><a href="#eha---evolutive-harmonic-analysis-meyers-et-al.-2001-thomson-1982" id="toc-eha---evolutive-harmonic-analysis-meyers-et-al.-2001-thomson-1982" class="nav-link" data-scroll-target="#eha---evolutive-harmonic-analysis-meyers-et-al.-2001-thomson-1982">Eha - Evolutive harmonic analysis (Meyers et al., 2001; Thomson, 1982)</a></li>
-  <li><a href="#asm---average-spectral-misfits-meyers-and-sageman-2007-or-on-the-danger-of-applying-a-technique-blindly" id="toc-asm---average-spectral-misfits-meyers-and-sageman-2007-or-on-the-danger-of-applying-a-technique-blindly" class="nav-link" data-scroll-target="#asm---average-spectral-misfits-meyers-and-sageman-2007-or-on-the-danger-of-applying-a-technique-blindly">ASM - Average Spectral Misfits (Meyers and Sageman, 2007) or on the danger of applying a technique blindly</a></li>
-  <li><a href="#timeopt-meyers-2015" id="toc-timeopt-meyers-2015" class="nav-link" data-scroll-target="#timeopt-meyers-2015">TimeOpt (Meyers, 2015)</a></li>
-  <li><a href="#transformation-of-your-signal-into-the-time-domain" id="toc-transformation-of-your-signal-into-the-time-domain" class="nav-link" data-scroll-target="#transformation-of-your-signal-into-the-time-domain">Transformation of your signal into the time domain</a>
+  <li><a href="#eha---evolutive-harmonic-analysis" id="toc-eha---evolutive-harmonic-analysis" class="nav-link" data-scroll-target="#eha---evolutive-harmonic-analysis">Eha - Evolutive harmonic analysis</a></li>
+  <li><a href="#asm---average-spectral-misfits-or-on-the-danger-of-applying-a-technique-blindly" id="toc-asm---average-spectral-misfits-or-on-the-danger-of-applying-a-technique-blindly" class="nav-link" data-scroll-target="#asm---average-spectral-misfits-or-on-the-danger-of-applying-a-technique-blindly">ASM - Average Spectral Misfits or on the danger of applying a technique blindly</a></li>
+  <li><a href="#timeopt" id="toc-timeopt" class="nav-link" data-scroll-target="#timeopt">TimeOpt</a></li>
+  <li><a href="#transformation-of-your-signal-into-the-time-domain" id="toc-transformation-of-your-signal-into-the-time-domain" class="nav-link" data-scroll-target="#transformation-of-your-signal-into-the-time-domain">Transformation of your signal into the time domain</a></li>
+  <li><a href="#practice" id="toc-practice" class="nav-link" data-scroll-target="#practice">Practice</a>
   <ul class="collapse">
   <li><a href="#references" id="toc-references" class="nav-link" data-scroll-target="#references">References</a></li>
   </ul></li>
@@ -3165,7 +3174,7 @@ background: darkturquoise;
 
 <section id="astrochron-advanced-functions---introduction" class="level1">
 <h1>Astrochron advanced functions - introduction</h1>
-<p>Note: These ‘recipe’ should be taken with caution; they are given with very basic settings… and settings fitting with the studied data. We will also see that it can be chanllenging. Always go back to the original papers and learn to use those tools properly and not as black boxes.</p>
+<p>Note: These ‘recipe’ should be taken with caution; they are given with very basic settings, and settings fitting with the studied data. We will also see that it can be challenging. Always go back to the original papers and learn to use those tools properly and not as black boxes.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(astrochron)</span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">#setwd(&quot;D:/COMPUTER/FILES/ &quot;)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -3175,46 +3184,32 @@ background: darkturquoise;
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We extract a dataset from astrochron </span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>DataA<span class="ot">=</span><span class="fu">getData</span>(<span class="st">&quot;1262-a*&quot;</span>)</span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="co"># We select some specific interval </span></span>
-<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>DataisoA<span class="ot">&lt;-</span><span class="fu">iso</span>(DataA, <span class="at">xmin=</span><span class="fl">117.62</span>, <span class="at">xmax=</span><span class="fl">139.22</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>DataisoA<span class="ot">&lt;-</span><span class="fu">iso</span>(DataA, <span class="at">xmin=</span><span class="fl">117.62</span>, <span class="at">xmax=</span><span class="fl">139.22</span>, <span class="at">verbose=</span>F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<section id="eha---evolutive-harmonic-analysis-meyers-et-al.-2001-thomson-1982" class="level2">
-<h2 class="anchored" data-anchor-id="eha---evolutive-harmonic-analysis-meyers-et-al.-2001-thomson-1982">Eha - Evolutive harmonic analysis (Meyers et al., 2001; Thomson, 1982)</h2>
-<p>Evolutive spectral analysis <span class="citation" data-cites="Meyers2001">(<a href="#ref-Meyers2001" role="doc-biblioref">Stephen R. Meyers, Sageman, and Hinnov 2001</a>)</span> have been already appraoched throught the Wavelet analysis in the practical on WaverideR. Evolutive Harmonic Analysis (eha) is a different type of evolutive technique and it is like applying MTM <span class="citation" data-cites="Thomson1982b">(<a href="#ref-Thomson1982b" role="doc-biblioref">Thomson 1982</a>)</span> with a sliding window through our record. The eha has the disatvantage that it needs a specific window and so it would focus on specific frequencies, while the wavelet focuses on a larger range of frequencies. Furthermore, the eha as a “sliding technique” will always have the lower and upper part of the record trimmed. However, it has the advantage that the frequencies can be identified more specifically, while they are identified more roughly through the wavelet.</p>
-<div class="callout callout-style-default callout-caution callout-titled">
-<div class="callout-header d-flex align-content-center" data-bs-toggle="collapse" data-bs-target=".callout-1-contents" aria-controls="callout-1" aria-expanded="true" aria-label="Toggle callout">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
-</div>
-<div class="callout-title-container flex-fill">
-Caution
-</div>
-<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
-</div>
-<div id="callout-1" class="callout-1-contents callout-collapse collapse show">
-<div class="callout-body-container callout-body">
-<p>❗ This chunk must be run manually in an interactive R session, to open a separated window</p>
-</div>
-</div>
-</div>
+<section id="eha---evolutive-harmonic-analysis" class="level2">
+<h2 class="anchored" data-anchor-id="eha---evolutive-harmonic-analysis">Eha - Evolutive harmonic analysis</h2>
+<p>Evolutive spectral analysis <span class="citation" data-cites="Meyers2001">(<a href="#ref-Meyers2001" role="doc-biblioref">Stephen R. Meyers, Sageman, and Hinnov 2001</a>)</span> have been already appraoched throught the Wavelet analysis in the practical on WaverideR. Evolutive Harmonic Analysis (eha) is a different type of evolutive technique and it is like applying MTM <span class="citation" data-cites="Thomson1982b">(<a href="#ref-Thomson1982b" role="doc-biblioref">Thomson 1982</a>)</span> with a sliding window through our record. The eha has the disatvantage that it needs a specific window and so it would focus on specific frequencies, while the wavelet focuses on a larger range of frequencies. Furthermore, the eha as a “sliding technique” will always have the lower and upper part of the record trimmed. However, it has the advantage that the frequencies can be identified more specifically, while they are identified more roughly through the wavelet. The wavelet allows to see nicely the interference patterns and those can sometimes be nicely identified through EHA (<span class="citation" data-cites="Laurin2016a">(<a href="#ref-Laurin2016a" role="doc-biblioref">Laurin et al. 2016</a>)</span>). Finally, it is always good to have mutliple techniques applied on your records, eha might allow you to see some cycles better than the Wavelet and vice versa.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We interpolate our signal </span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>DataA_i002 <span class="ot">&lt;-</span> <span class="fu">linterp</span>(DataisoA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We detrend our signal </span></span>
-<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>DataA_d <span class="ot">&lt;-</span> <span class="fu">detrend</span>(DataA_i002)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>DataA_d <span class="ot">&lt;-</span> <span class="fu">noLow</span>(DataA_i002, <span class="at">smooth=</span><span class="fl">0.2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Our record is about 30 m, with sampling interval of 0.02</span></span>
 <span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="co"># Perform Evolutive Harmonic Analysis using 2pi Slepian tapers,</span></span>
 <span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># a window of 8 meters, pad to 1000 points,</span></span>
 <span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a><span class="co"># and output Harmonic F-test confidence level results</span></span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>eha_A <span class="ot">&lt;-</span> <span class="fu">eha</span>(DataA_d, <span class="at">win =</span> <span class="dv">7</span>, <span class="at">pad =</span> <span class="dv">1000</span>, <span class="at">step =</span> <span class="fl">0.018</span>, <span class="at">output =</span> <span class="dv">4</span>, <span class="at">fmax =</span> <span class="dv">3</span>)</span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a><span class="co"># Now let&#39;s test the impact of trimming on the EHA </span></span>
-<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>DataAT <span class="ot">&lt;-</span> <span class="fu">trim</span>(DataisoA)</span>
-<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co"># We interpolate our trimmed signal </span></span>
-<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>DataAT_i <span class="ot">&lt;-</span> <span class="fu">linterp</span>(DataAT)</span>
-<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a><span class="co"># Re-run EHA on trimmed data</span></span>
-<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>eha_A <span class="ot">&lt;-</span> <span class="fu">eha</span>(DataAT_i, <span class="at">win =</span> <span class="dv">7</span>, <span class="at">pad =</span> <span class="dv">1000</span>, <span class="at">step =</span> <span class="fl">0.018</span>, <span class="at">output =</span> <span class="dv">4</span>, <span class="at">fmax =</span> <span class="dv">3</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>eha_A <span class="ot">&lt;-</span> <span class="fu">eha</span>(DataA_d, <span class="at">win =</span> <span class="dv">7</span>, <span class="at">pad =</span> <span class="dv">1000</span>, <span class="at">step =</span> <span class="fl">0.018</span>, </span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">output =</span> <span class="dv">4</span>, <span class="at">fmax =</span> <span class="dv">3</span>, <span class="at">genplot=</span><span class="dv">2</span>, <span class="at">verbose =</span> F)</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Now let&#39;s test the impact of trimming on the EHA </span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>DataAT <span class="ot">&lt;-</span> <span class="fu">trim</span>(DataisoA)</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a><span class="co"># We interpolate our trimmed signal </span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>DataAT_i <span class="ot">&lt;-</span> <span class="fu">linterp</span>(DataAT, <span class="at">verbose=</span>F)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a><span class="co"># Re-run EHA on trimmed data</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a>eha_A <span class="ot">&lt;-</span> <span class="fu">eha</span>(DataAT_i, <span class="at">win =</span> <span class="dv">7</span>, <span class="at">pad =</span> <span class="dv">1000</span>, <span class="at">step =</span> <span class="fl">0.018</span>, </span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>             <span class="at">output =</span> <span class="dv">4</span>, <span class="at">fmax =</span> <span class="dv">3</span>, <span class="at">genplot=</span><span class="dv">2</span>, <span class="at">verbose =</span> F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="? Question ?">
 <div class="callout-header d-flex align-content-center">
@@ -3226,13 +3221,13 @@ Caution
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Check every parameter in the function mostly “win”, “output” and fmax, what is the implication of changes on those parameters ? What is the impact of the trim function on the results of the eha for this specific record and why ?</p>
+<p>Check the role of every parameter in the function, mostly “win”, “output” and “fmax”. What are the implications of those parameters ? <br> What is the impact of the noLow (polynomial detrending) function on the results of the eha for this specific record and why ?</p>
 </div>
 </div>
 </section>
-<section id="asm---average-spectral-misfits-meyers-and-sageman-2007-or-on-the-danger-of-applying-a-technique-blindly" class="level2">
-<h2 class="anchored" data-anchor-id="asm---average-spectral-misfits-meyers-and-sageman-2007-or-on-the-danger-of-applying-a-technique-blindly">ASM - Average Spectral Misfits (Meyers and Sageman, 2007) or on the danger of applying a technique blindly</h2>
-<p>The Average Spectral Misfits provides an objective estimate of the optimal sedimentation rate for a stratigraphic interval that preserves a record of orbital forcing. The technique also provides a formal statistical test for rejecting the null hypothesis (no orbital signal). See <span class="citation" data-cites="Meyers2007a">(<a href="#ref-Meyers2007a" role="doc-biblioref">Stephen R. Meyers and Sageman 2007</a>)</span></p>
+<section id="asm---average-spectral-misfits-or-on-the-danger-of-applying-a-technique-blindly" class="level2">
+<h2 class="anchored" data-anchor-id="asm---average-spectral-misfits-or-on-the-danger-of-applying-a-technique-blindly">ASM - Average Spectral Misfits or on the danger of applying a technique blindly</h2>
+<p>The Average Spectral Misfits <span class="citation" data-cites="Meyers2007a">(<a href="#ref-Meyers2007a" role="doc-biblioref">Stephen R. Meyers and Sageman 2007</a>)</span> provides an objective estimate of the optimal sedimentation rate for a stratigraphic interval that preserves a record of orbital forcing. The technique also provides a formal statistical test for rejecting the null hypothesis (no orbital signal).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We interpolate to 0.02 or to 0.05</span></span>
 <span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>DataA_i002<span class="ot">&lt;-</span><span class="fu">linterp</span>(DataisoA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -3240,12 +3235,14 @@ Caution
 <div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Calculate MTM spectrum using 2pi Slepian tapers, include AR1 condfidence level estimates, and plot power with linear scale</span></span>
 <span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>mtm_A002<span class="ot">=</span><span class="fu">mtm</span>(DataA_i002,<span class="at">tbw=</span><span class="dv">2</span>,<span class="at">ar=</span><span class="cn">TRUE</span>,<span class="at">pl=</span><span class="dv">2</span>, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>mtm_A005<span class="ot">=</span><span class="fu">mtm</span>(DataA_i005,<span class="at">tbw=</span><span class="dv">2</span>,<span class="at">ar=</span><span class="cn">TRUE</span>,<span class="at">pl=</span><span class="dv">2</span>, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>T)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># To identify the peaks you think are significant, you can select those manually in R (not in Quarto). Be careful to select them from the lowest frequency to the highest frequency) :</span></span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="co"># freqs=idPts(mtm_MM$Frequency, dat2=mtm_MM$Power, logx=F, logy=T, plotype=1, annotate=1, output=1, verbose=T)</span></span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># freqs&lt;-data.frame(Freq_id)</span></span>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># To identify the peaks you think are significant, you can select those manually in R (not in Quarto, so you have to uncomment the following lines). Be careful to select them from the lowest frequency to the highest frequency) :</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="co"># freqs=idPts(mtm_MM$Frequency, dat2=mtm_MM$Power, logx=F, logy=T, plotype=1, annotate=1, output=1, verbose=T)</span></span>
 <span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co">#The selection and also be automated with with MTM set on output=2 </span></span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>freq_mtm002 <span class="ot">&lt;-</span> <span class="fu">mtm</span>(DataA_i002,<span class="at">tbw=</span><span class="dv">2</span>,<span class="at">ar=</span><span class="cn">TRUE</span>,<span class="at">pl=</span><span class="dv">2</span>, <span class="at">output=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="co"># freqs&lt;-data.frame(Freq_id)</span></span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="co">#The selection and also be automated with with MTM set on output=2 </span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>freq_mtm002 <span class="ot">&lt;-</span> <span class="fu">mtm</span>(DataA_i002,<span class="at">tbw=</span><span class="dv">2</span>,<span class="at">ar=</span><span class="cn">TRUE</span>,<span class="at">pl=</span><span class="dv">2</span>, <span class="at">output=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>freq_mtm005 <span class="ot">&lt;-</span> <span class="fu">mtm</span>(DataA_i005,<span class="at">tbw=</span><span class="dv">2</span>,<span class="at">ar=</span><span class="cn">TRUE</span>,<span class="at">pl=</span><span class="dv">2</span>, <span class="at">output=</span><span class="dv">2</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># please note that to extract frequencies you can also use other functions such as lowspec (the outcome might be different)</span></span>
 <span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
@@ -3278,13 +3275,13 @@ Caution
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>So you can see that depending on the interpolation, the outcome is different, do you identify why ?</p>
+<p>So, you can see that depending on the interpolation, the outcome is different, do you identify why ?</p>
 </div>
 </div>
 </section>
-<section id="timeopt-meyers-2015" class="level2">
-<h2 class="anchored" data-anchor-id="timeopt-meyers-2015">TimeOpt (Meyers, 2015)</h2>
-<p>The TimeOpt technique identifies the time scale that simultaneously optimizes eccentricity amplitude modulation of the precession band, and the concentration of power at precession (carrier) and eccentricity (modulator) frequencies <span class="citation" data-cites="Meyers2015c">(<a href="#ref-Meyers2015c" role="doc-biblioref">Stephen R. Meyers 2015</a>)</span>.</p>
+<section id="timeopt" class="level2">
+<h2 class="anchored" data-anchor-id="timeopt">TimeOpt</h2>
+<p>The TimeOpt technique <span class="citation" data-cites="Meyers2015c">(<a href="#ref-Meyers2015c" role="doc-biblioref">Stephen R. Meyers 2015</a>)</span> identifies the time scale that simultaneously optimizes eccentricity amplitude modulation of the precession band, and the concentration of power at precession (carrier) and eccentricity (modulator) frequencies.</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="do">## TimeOpt </span></span>
 <span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a><span class="co"># the function requires to define the target E and the target P that should be modulated by target E. </span></span>
@@ -3318,7 +3315,7 @@ Caution
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>The outcome is again different from ASM and is different depending how you define the P frequencies. How would you test which solution is best ?</p>
+<p>The outcome is again different from ASM and is different depending how you define the P frequencies. How would you test which ASM outcome (sedimentation rate) is best ?</p>
 </div>
 </div>
 </section>
@@ -3341,9 +3338,17 @@ Caution
 <span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a><span class="co"># (4) Tuning through a tracked defined cycle</span></span>
 <span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a><span class="do">### see function trackFreq, which should be applied manually (outside of Quarto), followed by freq2sedrate, then sedrate2time </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
+</section>
+<section id="practice" class="level2">
+<h2 class="anchored" data-anchor-id="practice">Practice</h2>
+<p>The Cyclostratigraphy Intercomparison Project (CIP) assessed the robustness of cyclostratigraphic methods using an experimental design of three artificial cyclostratigraphic case studies with known input parameters. Each case study is designed to address specific challenges that are relevant to cyclostratigraphy.</p>
+<p>If you want to practice further, you can consider those cases from the Cyclostratigraphic Intercomparison Project, made available on <a href="https://www.cyclostratigraphy.org/the-cip-initiative">https://www.cyclostratigraphy.org/the-cip-initiative</a>. Don’t look at the answers and get your hand durty.</p>
 <section id="references" class="level3">
 <h3 class="anchored" data-anchor-id="references">References</h3>
 <div id="refs" class="references csl-bib-body hanging-indent" data-entry-spacing="0" role="list">
+<div id="ref-Laurin2016a" class="csl-entry" role="listitem">
+Laurin, Jiří, Stephen R. Meyers, Simone Galeotti, and Luca Lanci. 2016. <span>“Frequency Modulation Reveals the Phasing of Orbital Eccentricity During <span>Cretaceous Oceanic Anoxic Event II</span> and the <span>Eocene</span> Hyperthermals.”</span> <em>Earth and Planetary Science Letters</em> 442: 143–56. <a href="https://doi.org/10.1016/j.epsl.2016.02.047">https://doi.org/10.1016/j.epsl.2016.02.047</a>.
+</div>
 <div id="ref-Lourens2005a" class="csl-entry" role="listitem">
 Lourens, Lucas J., Appy Sluijs, Dick Kroon, James C. Zachos, Ellen Thomas, Ursula Rohl, Julie Bowles, et al. 2005. <span>“Astronomical Pacing of Late <span>Palaeocene</span> to Early <span>Eocene</span> Global Warming Events.”</span> <em>Nature</em> 435 (7045): 1083–87. <a href="https://doi.org/10.1038/nature03814">https://doi.org/10.1038/nature03814</a>.
 </div>

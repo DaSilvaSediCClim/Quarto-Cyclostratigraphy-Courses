@@ -3,10 +3,10 @@ title: "Time-Series Analysis of Paleoclimate Signals – Practical 01 - Basics o
 title-block-banner: "darkturquoise"
 subtitle: |
   Coldigiocco Cyclonet Summer School 2025<br>
-  by C. Zeeden, M. Crucifix, A.C. Da Silva
 author: "Anne-Christine Da Silva"
 date: today
 bibliography: references.bib
+doi: https://doi.org/10.5281/zenodo.17020808
 format:
   html:
     embed-resources: true
@@ -17,7 +17,6 @@ execute:
   cache: true
 ---
 
-
 # Basic R Usage
 
 This section introduces some basic operations in R that can be useful for anyone starting with time series analysis or data manipulation.
@@ -25,6 +24,10 @@ This section introduces some basic operations in R that can be useful for anyone
 If you want to learn more in-depth on R data manipulation, a lot of resources are available for free, including [cran.r-project.org/doc/contrib/Paradis-rdebuts_en.pdf](cran.r-project.org/doc/contrib/Paradis-rdebuts_en.pdf) and <https://education.rstudio.com/learn/beginner/>
 
 If you already know some R basics, you can skip this part.
+
+::: {.callout-tip title="Tip on R and help"}
+If you type ? astrochron in the console pane or astrochron in the help pane, you will reach the documentation related to astrochron. If you go down the page, at the very bottom, you will see a name "Index" which is a link to all the functions and arguments of astrochron.
+:::
 
 ## Opening and saving files
 
@@ -40,6 +43,8 @@ In R the codes is the classic text, when you have this sign \# is used to make c
 
 # Set your working directory (change the path accordingly) 
 # setwd("C:/computer/path")  
+# be careful that the slash should be / and not \ 
+
 ```
 
 
@@ -64,14 +69,13 @@ plot(dataLR, type='l')
 
 # Save and reload
 write.csv(dataLR, file="Data_L_R.csv", row.names=FALSE) # to save the file 607-18O
-DataM <- read.csv("Data_L_R.csv") # to reopen the file 607-18O you just downloaded
+DataM <- read.csv("Data_L_R.csv") # to reopen the file "607-18O" you just imported into R as dataLR. 
 
 # Uncomment the following line to view your new dataset : 
 # View(DataM) # to visualize the dataframe you created 
 ```
 
 ## Simple data exploration
-
 ```{r}
 #| echo: true
 #| results: hide
@@ -113,7 +117,7 @@ data_LR_S <- dataLR[, c(1, 2)]
 
 ```
 
-::: {.callout-note title="? Question ?"}
+::: {.callout-tip title="Tip"}
 Use the function "View" to check the type of transformation that we have done to the data (dataLR, subset_data, data_LR_S)
 :::
 
@@ -151,14 +155,14 @@ summary_stats <- data %>%
 sorted <- data %>% arrange(desc(value))
 ```
 
-::: {.callout-note title="? Question ?"}
+::: {.callout-tip title="Tip"}
 Use the function "View" to check the type of transformation that we have done to the data (data, filtered, mutated, summary_stats, sorted)
 :::
 
 ## Plotting with R
 
 ::: {.callout-tip title="Tip on plotting"}
-R includes a basic plot function which is very versatile and easy to combine with multiple packages. It is embeded into R (no nead to download and load it). The commands get processed immediately and it does not create an R object that holds results.
+R includes a basic plot function which is very versatile and easy to combine with multiple packages. It is embeded into R (no nead to install the package and load it). The commands get processed immediately and it does not create an R object that holds results.
 
 Other plotting packages have also been developed, including the classically used "ggplot2" which is a more integrated plotting package (fancier plots and more functions) and "plotly" which allows to make interactive plots (you can for example zoom or click on dots and see their associated values). Both ggplot2 and plotly are packages which should be installed and loaded for use. They have a specific grammar that can be saved as an R object and can get progressively modified by adding "layers" to a base plot.
 :::
@@ -223,4 +227,45 @@ ggplot(my_data, aes(y = signal)) +
   geom_boxplot(fill = "lightblue")
 
 
+
 ```
+
+
+### Plotting with plotly
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide
+
+# Install and load ggplot2 (if not already installed) 
+# install.packages("plotly") 
+library(plotly)  
+
+# plot_ly() tries to create a sensible plot based on the information you 
+# give it. If you don't provide a trace type, plot_ly() will infer one.
+plot_ly(economics, x = ~pop)
+plot_ly(economics, x = ~date, y = ~pop)
+# plot_ly() doesn't require data frame(s), which allows one to take 
+# advantage of trace type(s) designed specifically for numeric matrices
+plot_ly(z = ~volcano)
+plot_ly(z = ~volcano, type = "surface")
+
+# plotly has a functional interface: every plotly function takes a plotly
+# object as it's first input argument and returns a modified plotly object
+add_lines(plot_ly(economics, x = ~date, y = ~unemploy/pop))
+
+# To make code more readable, plotly imports the pipe operator from magrittr
+economics %>% plot_ly(x = ~date, y = ~unemploy/pop) %>% add_lines()
+
+# Attributes defined via plot_ly() set 'global' attributes that 
+# are carried onto subsequent traces, but those may be over-written
+plot_ly(economics, x = ~date, color = I("black")) %>%
+ add_lines(y = ~uempmed) %>%
+ add_lines(y = ~psavert, color = I("red"))
+
+
+
+```
+

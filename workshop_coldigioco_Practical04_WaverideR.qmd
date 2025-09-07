@@ -1,13 +1,12 @@
 ---
-title: "Time-Series Analysis of Paleoclimate Signals – Practical 04"
+title: "Time-Series Analysis of Paleoclimate Signals – Practical 04 - Basics on WaverideR"
 title-block-banner: "darkturquoise"
 subtitle: |
-  Basics on WaverideR <br>
   Coldigiocco Cyclonet Summer School 2025<br>
-  by C. Zeeden, M. Crucifix, A.C. Da Silva
-author: "Michiel Arts & Anne-Christine Da Silva"
+author: "Anne-Christine Da Silva (Quarto) and Michiel Arts (R package)"
 date: today
 bibliography: references.bib
+doi: https://doi.org/10.5281/zenodo.17020808
 format:
   html:
     embed-resources: true
@@ -54,7 +53,7 @@ plot(mag,type="l",xlab="depth (metres)",ylab="magnetic sucept")
 ```
 
 
-A wavelet is truncated sine waves with N number of cycles contained within just like a windowed Fast Fourier analysis like the EHA function of 'astrochron' is is possible to track changing periods in the depth domain
+A wavelet is truncated sine waves with N number of cycles contained within just like a windowed Fast Fourier analysis. The WaverideR package includes a function to track the evolving period of the cycle you want to focus. Then you can use this tracking line to transform your record from the distance to the time domain. A similar function exists in astrochron with eha (see trackFreq or traceFreq). 
 
 ```{r}
 #| echo: true
@@ -113,11 +112,12 @@ plot_avg_wavelet(wavelet=mag_wt,
 ```
 
 ::: {.callout-tip title="Tip on WaverideR plotting"}
-Classically when working in R, the function dev_new is set to TRUE, which means that R opens a new plotting window to plot the plot, this guarantees a "nice" looking plot. However when running an R Quarto chunck, to allow plotting it needs to be set to dev_new = FALSE; but the plots are of lower quality. If you transfer this code to R, set dev_new to TRUE. 
+Classically when working in R, the argument "dev_new" in the function plot_wavelet is set to TRUE by default, which means that R opens a new plotting window to plot the plot, this guarantees a "nice" looking plot. 
+When running an R Quarto chunck, to allow plotting it needs to be set to dev_new = FALSE. However, the plots are of lower quality. If you transfer this code to R, set dev_new to TRUE. 
 :::
 
 
-We can see some spectra power with a period of 2-4 m, which according to [@Pas2018] is the 405kyr eccentricity cycle. The period in Kyr of this cycle is very stable and thus we can use this cycle to create an Age model. 
+We can see some spectra power with a period of 2-4 m, which according to [@Pas2018] is the 405kyr eccentricity cycle. The period in Kyr of this cycle is very stable and thus we can use this cycle to create an age model. 
 
 We can  track the band of high spectral power in the wavelet spectra, with the track_period_wavelet" function, allowing to track the ~3 m long eccentricity cycle in the Wavelet spectra. 
 
@@ -286,3 +286,4 @@ lines(ecc_100,col="blue") #plot the short (100 kyr) eccentricity cycle
 lines(ecc_405,col="red")#plot the long (405 kyr) eccentricity cycle
 
 ::: 
+

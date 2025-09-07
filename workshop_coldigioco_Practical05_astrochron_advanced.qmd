@@ -1,13 +1,12 @@
 ---
-title: "Time-Series Analysis of Paleoclimate Signals – Practical 05"
+title: "Time-Series Analysis of Paleoclimate Signals – Practical 05 - Advanced techniques on astrochron"
 title-block-banner: "darkturquoise"
 subtitle: |
-  Advanced techniques on astrochron <br>
   Coldigiocco Cyclonet Summer School 2025<br>
-  by C. Zeeden, M. Crucifix, A.C. Da Silva
 author: "Anne-Christine Da Silva"
 date: today
 bibliography: references.bib
+doi: https://doi.org/10.5281/zenodo.17020808
 format:
   html:
     embed-resources: true
@@ -20,7 +19,7 @@ execute:
 
 #	Astrochron advanced functions - introduction 
 
-Note: These ‘recipe’ should be taken with caution; they are given with very basic settings… and settings fitting with the studied data. We will also see that it can be chanllenging. Always go back to the original papers and learn to use those tools properly and not as black boxes. 
+Note: These ‘recipe’ should be taken with caution; they are given with very basic settings, and settings fitting with the studied data. We will also see that it can be challenging. Always go back to the original papers and learn to use those tools properly and not as black boxes. 
 
 
 ```{r}
@@ -47,15 +46,14 @@ For this practical, we selected data from the PETM-ETM2 Interval From the Walvis
 # We extract a dataset from astrochron 
 DataA=getData("1262-a*")
 # We select some specific interval 
-DataisoA<-iso(DataA, xmin=117.62, xmax=139.22)
+DataisoA<-iso(DataA, xmin=117.62, xmax=139.22, verbose=F)
 ```
 
-## Eha - Evolutive harmonic analysis (Meyers et al., 2001; Thomson, 1982) 
-Evolutive spectral analysis [@Meyers2001] have been already appraoched throught the Wavelet analysis in the practical on WaverideR. Evolutive Harmonic Analysis (eha) is a different type of evolutive technique and it is like applying MTM [@Thomson1982b] with a sliding window through our record. The eha has the disatvantage that it needs a specific window and so it would focus on specific frequencies, while the wavelet focuses on a larger range of frequencies. Furthermore, the eha as a "sliding technique" will always have the lower and upper part of the record trimmed. However, it has the advantage that the frequencies can be identified more specifically, while they are identified more roughly through the wavelet. 
+## Eha - Evolutive harmonic analysis
+Evolutive spectral analysis [@Meyers2001] have been already appraoched throught the Wavelet analysis in the practical on WaverideR. Evolutive Harmonic Analysis (eha) is a different type of evolutive technique and it is like applying MTM [@Thomson1982b] with a sliding window through our record. The eha has the disatvantage that it needs a specific window and so it would focus on specific frequencies, while the wavelet focuses on a larger range of frequencies. Furthermore, the eha as a "sliding technique" will always have the lower and upper part of the record trimmed. However, it has the advantage that the frequencies can be identified more specifically, while they are identified more roughly through the wavelet. The wavelet allows to see nicely the interference patterns and those can sometimes be nicely identified through EHA ([@Laurin2016a]).
+Finally, it is always good to have mutliple techniques applied on your records, eha might allow you to see some cycles better than the Wavelet and vice versa. 
 
-::: {.callout-caution collapse="false"}
-❗ This chunk must be run manually in an interactive R session, to open  a separated window 
-:::
+
 
 ```{r}
 #| echo: true
@@ -67,33 +65,36 @@ Evolutive spectral analysis [@Meyers2001] have been already appraoched throught 
 DataA_i002 <- linterp(DataisoA)
 
 # We detrend our signal 
-DataA_d <- detrend(DataA_i002)
+DataA_d <- noLow(DataA_i002, smooth=0.2)
 
 # Our record is about 30 m, with sampling interval of 0.02
 # Perform Evolutive Harmonic Analysis using 2pi Slepian tapers,
 # a window of 8 meters, pad to 1000 points,
 # and output Harmonic F-test confidence level results
-eha_A <- eha(DataA_d, win = 7, pad = 1000, step = 0.018, output = 4, fmax = 3)
+eha_A <- eha(DataA_d, win = 7, pad = 1000, step = 0.018, 
+             output = 4, fmax = 3, genplot=2, verbose = F)
 
 # Now let's test the impact of trimming on the EHA 
 DataAT <- trim(DataisoA)
 
 # We interpolate our trimmed signal 
-DataAT_i <- linterp(DataAT)
+DataAT_i <- linterp(DataAT, verbose=F)
 
 # Re-run EHA on trimmed data
-eha_A <- eha(DataAT_i, win = 7, pad = 1000, step = 0.018, output = 4, fmax = 3)
+eha_A <- eha(DataAT_i, win = 7, pad = 1000, step = 0.018, 
+             output = 4, fmax = 3, genplot=2, verbose = F)
 
 ```
 
 ::: {.callout-note title="? Question ?"}
-Check every parameter in the function mostly "win", "output" and fmax, what is the implication of changes on those parameters ? 
-What is the impact of the trim function on the results of the eha for this specific record and why ? 
+Check the role of every parameter in the function, mostly "win", "output" and "fmax". What are the implications of those parameters ? <br /> 
+What is the impact of the noLow (polynomial detrending) function on the results of the eha for this specific record and why ? 
 :::
 
 
-## ASM - Average Spectral Misfits (Meyers and Sageman, 2007) or on the danger of applying a technique blindly 
-The Average Spectral Misfits provides an objective estimate of the optimal sedimentation rate for a stratigraphic interval that preserves a record of orbital forcing. The technique also provides a formal statistical test for rejecting the null hypothesis (no orbital signal). See [@Meyers2007a]
+## ASM - Average Spectral Misfits or on the danger of applying a technique blindly 
+The Average Spectral Misfits [@Meyers2007a] provides an objective estimate of the optimal sedimentation rate for a stratigraphic interval that preserves a record of orbital forcing. The technique also provides a formal statistical test for rejecting the null hypothesis (no orbital signal). 
+
 ```{r}
 #| echo: true
 #| results: hide
@@ -109,8 +110,10 @@ DataA_i005<-linterp(DataisoA, dt=0.05)
 mtm_A002=mtm(DataA_i002,tbw=2,ar=TRUE,pl=2, output=1, genplot=T)
 mtm_A005=mtm(DataA_i005,tbw=2,ar=TRUE,pl=2, output=1, genplot=T)
 
-# To identify the peaks you think are significant, you can select those manually in R (not in Quarto). Be careful to select them from the lowest frequency to the highest frequency) :
+# To identify the peaks you think are significant, you can select those manually in R (not in Quarto, so you have to uncomment the following lines). Be careful to select them from the lowest frequency to the highest frequency) :
+
 # freqs=idPts(mtm_MM$Frequency, dat2=mtm_MM$Power, logx=F, logy=T, plotype=1, annotate=1, output=1, verbose=T)
+
 # freqs<-data.frame(Freq_id)
 
 #The selection and also be automated with with MTM set on output=2 
@@ -139,12 +142,13 @@ asm_mtm002<- asm(freq=freq_mtm002, target=target, rayleigh=rayleigh, nyquist=nyq
 asm_mtm005<- asm(freq=freq_mtm005, target=target, rayleigh=rayleigh, nyquist=nyquist_005, sedmin=0.5, sedmax=3)
 
 ```
+
 ::: {.callout-note title="? Question ?"}
-So you can see that depending on the interpolation, the outcome is different, do you identify why ?
+So, you can see that depending on the interpolation, the outcome is different, do you identify why ?
 :::
 
-## TimeOpt (Meyers, 2015)
-The TimeOpt technique identifies the time scale that simultaneously optimizes eccentricity amplitude modulation of the precession band, and the concentration of power at precession (carrier) and eccentricity (modulator) frequencies [@Meyers2015c]. 
+## TimeOpt 
+The TimeOpt technique [@Meyers2015c] identifies the time scale that simultaneously optimizes eccentricity amplitude modulation of the precession band, and the concentration of power at precession (carrier) and eccentricity (modulator) frequencies. 
 ```{r}
 #| echo: true
 #| results: hide
@@ -179,7 +183,7 @@ timeOpt_005PB<-timeOpt(DataA_i005, sedmin=0.5, sedmax=3,  targetE=targetE,  targ
 
 
 ::: {.callout-note title="? Question ?"}
-The outcome is again different from ASM and is different depending how you define the P frequencies. How would you test which solution is best ?
+The outcome is again different from ASM and is different depending how you define the P frequencies. How would you test which ASM outcome (sedimentation rate) is best ?
 :::
 
 
@@ -208,6 +212,12 @@ Tuned_DataA_timeOpt_005PL<-timeOpt(DataA_i005, sedmin=0.5, sedmax=3,  targetE=ta
 ### see function trackFreq, which should be applied manually (outside of Quarto), followed by freq2sedrate, then sedrate2time 
 
 ```
+
+## Practice  
+
+The Cyclostratigraphy Intercomparison Project (CIP) assessed the robustness of cyclostratigraphic methods using an experimental design of three artificial cyclostratigraphic case studies with known input parameters. Each case study is designed to address specific challenges that are relevant to cyclostratigraphy.
+
+If you want to practice further, you can consider those cases from the Cyclostratigraphic Intercomparison Project, made available on [https://www.cyclostratigraphy.org/the-cip-initiative](https://www.cyclostratigraphy.org/the-cip-initiative). Don't look at the answers and get your hand durty. 
 
 ### References
 

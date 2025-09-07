@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Anne-Christine Da Silva">
-<meta name="dcterms.date" content="2025-08-11">
+<meta name="dcterms.date" content="2025-09-07">
 
 <title>Time-Series Analysis of Paleoclimate Signals – Practical 01 - Basics on R</title>
 <style>
@@ -3093,7 +3093,7 @@ background: darkturquoise;
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
       <h1 class="title">Time-Series Analysis of Paleoclimate Signals – Practical 01 - Basics on R</h1>
-            <p class="subtitle lead"></p><p>Coldigiocco Cyclonet Summer School 2025<br> by C. Zeeden, M. Crucifix, A.C. Da Silva</p><p></p>
+            <p class="subtitle lead"></p><p>Coldigiocco Cyclonet Summer School 2025<br></p><p></p>
                       </div>
   </div>
     
@@ -3110,11 +3110,19 @@ background: darkturquoise;
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">August 11, 2025</p>
+        <p class="date">September 7, 2025</p>
       </div>
     </div>
     
       
+      <div>
+      <div class="quarto-title-meta-heading">Doi</div>
+      <div class="quarto-title-meta-contents">
+        <p class="doi">
+          <a href="https://doi.org/https://doi.org/10.5281/zenodo.17020808">https://doi.org/10.5281/zenodo.17020808</a>
+        </p>
+      </div>
+    </div>
     </div>
     
   
@@ -3134,6 +3142,7 @@ background: darkturquoise;
   <ul class="collapse">
   <li><a href="#simple-plots-with-basic-r" id="toc-simple-plots-with-basic-r" class="nav-link" data-scroll-target="#simple-plots-with-basic-r">Simple plots with basic R</a></li>
   <li><a href="#plotting-with-ggplot2" id="toc-plotting-with-ggplot2" class="nav-link" data-scroll-target="#plotting-with-ggplot2">Plotting with ggplot2</a></li>
+  <li><a href="#plotting-with-plotly" id="toc-plotting-with-plotly" class="nav-link" data-scroll-target="#plotting-with-plotly">Plotting with plotly</a></li>
   </ul></li>
   </ul></li>
   </ul>
@@ -3150,6 +3159,19 @@ background: darkturquoise;
 <p>This section introduces some basic operations in R that can be useful for anyone starting with time series analysis or data manipulation.</p>
 <p>If you want to learn more in-depth on R data manipulation, a lot of resources are available for free, including <a href="cran.r-project.org/doc/contrib/Paradis-rdebuts_en.pdf">cran.r-project.org/doc/contrib/Paradis-rdebuts_en.pdf</a> and <a href="https://education.rstudio.com/learn/beginner/" class="uri">https://education.rstudio.com/learn/beginner/</a></p>
 <p>If you already know some R basics, you can skip this part.</p>
+<div class="callout callout-style-default callout-tip callout-titled" title="Tip on R and help">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip on R and help
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you type ? astrochron in the console pane or astrochron in the help pane, you will reach the documentation related to astrochron. If you go down the page, at the very bottom, you will see a name “Index” which is a link to all the functions and arguments of astrochron.</p>
+</div>
+</div>
 <section id="opening-and-saving-files" class="level2">
 <h2 class="anchored" data-anchor-id="opening-and-saving-files">Opening and saving files</h2>
 <div class="callout callout-style-default callout-tip callout-titled" title="Tip on R and commenting and setting working directory">
@@ -3167,7 +3189,8 @@ Tip on R and commenting and setting working directory
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Set your working directory (change the path accordingly) </span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># setwd(&quot;C:/computer/path&quot;)  </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co"># setwd(&quot;C:/computer/path&quot;)  </span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co"># be careful that the slash should be / and not \ </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we load astrochron </span></span>
@@ -3184,7 +3207,7 @@ Tip on R and commenting and setting working directory
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># Save and reload</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="fu">write.csv</span>(dataLR, <span class="at">file=</span><span class="st">&quot;Data_L_R.csv&quot;</span>, <span class="at">row.names=</span><span class="cn">FALSE</span>) <span class="co"># to save the file 607-18O</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>DataM <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data_L_R.csv&quot;</span>) <span class="co"># to reopen the file 607-18O you just downloaded</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>DataM <span class="ot">&lt;-</span> <span class="fu">read.csv</span>(<span class="st">&quot;Data_L_R.csv&quot;</span>) <span class="co"># to reopen the file &quot;607-18O&quot; you just imported into R as dataLR. </span></span>
 <span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Uncomment the following line to view your new dataset : </span></span>
 <span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># View(DataM) # to visualize the dataframe you created </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
@@ -3221,13 +3244,13 @@ Tip on R and commenting and setting working directory
 <span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a><span class="co">#or </span></span>
 <span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>data_LR_S <span class="ot">&lt;-</span> dataLR[, <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>)]   </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled" title="? Question ?">
+<div class="callout callout-style-default callout-tip callout-titled" title="Tip">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-? Question ?
+Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -3262,13 +3285,13 @@ Tip on R and commenting and setting working directory
 <span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a><span class="co"># Arrange rows </span></span>
 <span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>sorted <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span> <span class="fu">arrange</span>(<span class="fu">desc</span>(value))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<div class="callout callout-style-default callout-note callout-titled" title="? Question ?">
+<div class="callout callout-style-default callout-tip callout-titled" title="Tip">
 <div class="callout-header d-flex align-content-center">
 <div class="callout-icon-container">
 <i class="callout-icon"></i>
 </div>
 <div class="callout-title-container flex-fill">
-? Question ?
+Tip
 </div>
 </div>
 <div class="callout-body-container callout-body">
@@ -3288,7 +3311,7 @@ Tip on plotting
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>R includes a basic plot function which is very versatile and easy to combine with multiple packages. It is embeded into R (no nead to download and load it). The commands get processed immediately and it does not create an R object that holds results.</p>
+<p>R includes a basic plot function which is very versatile and easy to combine with multiple packages. It is embeded into R (no nead to install the package and load it). The commands get processed immediately and it does not create an R object that holds results.</p>
 <p>Other plotting packages have also been developed, including the classically used “ggplot2” which is a more integrated plotting package (fancier plots and more functions) and “plotly” which allows to make interactive plots (you can for example zoom or click on dots and see their associated values). Both ggplot2 and plotly are packages which should be installed and loaded for use. They have a specific grammar that can be saved as an R object and can get progressively modified by adding “layers” to a base plot.</p>
 </div>
 </div>
@@ -3331,6 +3354,36 @@ Tip on plotting
 <div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Boxplot </span></span>
 <span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(my_data, <span class="fu">aes</span>(<span class="at">y =</span> signal)) <span class="sc">+</span>   </span>
 <span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(<span class="at">fill =</span> <span class="st">&quot;lightblue&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+</section>
+<section id="plotting-with-plotly" class="level3">
+<h3 class="anchored" data-anchor-id="plotting-with-plotly">Plotting with plotly</h3>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install and load ggplot2 (if not already installed) </span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="co"># install.packages(&quot;plotly&quot;) </span></span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(plotly)  </span>
+<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="co"># plot_ly() tries to create a sensible plot based on the information you </span></span>
+<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="co"># give it. If you don&#39;t provide a trace type, plot_ly() will infer one.</span></span>
+<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(economics, <span class="at">x =</span> <span class="sc">~</span>pop)</span>
+<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(economics, <span class="at">x =</span> <span class="sc">~</span>date, <span class="at">y =</span> <span class="sc">~</span>pop)</span>
+<span id="cb16-9"><a href="#cb16-9" aria-hidden="true" tabindex="-1"></a><span class="co"># plot_ly() doesn&#39;t require data frame(s), which allows one to take </span></span>
+<span id="cb16-10"><a href="#cb16-10" aria-hidden="true" tabindex="-1"></a><span class="co"># advantage of trace type(s) designed specifically for numeric matrices</span></span>
+<span id="cb16-11"><a href="#cb16-11" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(<span class="at">z =</span> <span class="sc">~</span>volcano)</span>
+<span id="cb16-12"><a href="#cb16-12" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(<span class="at">z =</span> <span class="sc">~</span>volcano, <span class="at">type =</span> <span class="st">&quot;surface&quot;</span>)</span>
+<span id="cb16-13"><a href="#cb16-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-14"><a href="#cb16-14" aria-hidden="true" tabindex="-1"></a><span class="co"># plotly has a functional interface: every plotly function takes a plotly</span></span>
+<span id="cb16-15"><a href="#cb16-15" aria-hidden="true" tabindex="-1"></a><span class="co"># object as it&#39;s first input argument and returns a modified plotly object</span></span>
+<span id="cb16-16"><a href="#cb16-16" aria-hidden="true" tabindex="-1"></a><span class="fu">add_lines</span>(<span class="fu">plot_ly</span>(economics, <span class="at">x =</span> <span class="sc">~</span>date, <span class="at">y =</span> <span class="sc">~</span>unemploy<span class="sc">/</span>pop))</span>
+<span id="cb16-17"><a href="#cb16-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-18"><a href="#cb16-18" aria-hidden="true" tabindex="-1"></a><span class="co"># To make code more readable, plotly imports the pipe operator from magrittr</span></span>
+<span id="cb16-19"><a href="#cb16-19" aria-hidden="true" tabindex="-1"></a>economics <span class="sc">%&gt;%</span> <span class="fu">plot_ly</span>(<span class="at">x =</span> <span class="sc">~</span>date, <span class="at">y =</span> <span class="sc">~</span>unemploy<span class="sc">/</span>pop) <span class="sc">%&gt;%</span> <span class="fu">add_lines</span>()</span>
+<span id="cb16-20"><a href="#cb16-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb16-21"><a href="#cb16-21" aria-hidden="true" tabindex="-1"></a><span class="co"># Attributes defined via plot_ly() set &#39;global&#39; attributes that </span></span>
+<span id="cb16-22"><a href="#cb16-22" aria-hidden="true" tabindex="-1"></a><span class="co"># are carried onto subsequent traces, but those may be over-written</span></span>
+<span id="cb16-23"><a href="#cb16-23" aria-hidden="true" tabindex="-1"></a><span class="fu">plot_ly</span>(economics, <span class="at">x =</span> <span class="sc">~</span>date, <span class="at">color =</span> <span class="fu">I</span>(<span class="st">&quot;black&quot;</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb16-24"><a href="#cb16-24" aria-hidden="true" tabindex="-1"></a> <span class="fu">add_lines</span>(<span class="at">y =</span> <span class="sc">~</span>uempmed) <span class="sc">%&gt;%</span></span>
+<span id="cb16-25"><a href="#cb16-25" aria-hidden="true" tabindex="-1"></a> <span class="fu">add_lines</span>(<span class="at">y =</span> <span class="sc">~</span>psavert, <span class="at">color =</span> <span class="fu">I</span>(<span class="st">&quot;red&quot;</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 </section>
 </section>

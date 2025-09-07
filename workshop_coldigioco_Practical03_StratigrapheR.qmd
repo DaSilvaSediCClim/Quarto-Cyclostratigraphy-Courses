@@ -1,12 +1,12 @@
 ---
-title: "Time-Series Analysis of Paleoclimate Signals – Practical 03"
+title: "Time-Series Analysis of Paleoclimate Signals – Practical 03 - Basics on StratigrapheR"
 title-block-banner: "darkturquoise"
 subtitle: |
-  Basics on StratigrapheR<br>
   Coldigiocco Cyclonet Summer School 2025<br>
-  by C. Zeeden, M. Crucifix, A.C. Da Silva
-author: "Anne-Christine Da Silva"
-date: "2025-07-03"
+author: "Anne-Christine Da Silva (with the support of S. Wouters & P. Cerfontaine)"
+date: today
+bibliography: references.bib
+doi: https://doi.org/10.5281/zenodo.17020808
 format:
   html:
     embed-resources: true
@@ -16,13 +16,11 @@ format:
 execute: 
   cache: true
 ---
+# StratiprapheR
 
+Stratigrapher allows you to build lithologs and to plot your log on the side of your proxies and of your spectral analysis results [@WoutersStratigrapheR2018; @WoutersStratigrapheRConceptsLitholog2021].
 
-# StratigrapheR
-
-Stratigrapher allows you to build lithologs and to plot your log on the side of your proxies and of your spectral analysis results (Wouters et al., 2021).
-
-![StratigrapheR - how to cite it](StratigrapheR_01.png){fig-align="center"}
+![StratigrapheR - Reference](StratigrapheR_01.png){fig-align="center"}
 
 ![StratigrapheR - Stratigrapher plotting with magnetochron, color, sample position and another example with specific fossils on the side and magnetic susceptibility evolution.](StratigrapheR_02.png)
 
@@ -60,7 +58,7 @@ this dataset should include the description of each bed with :
 you can also include other columns with anything else you find useful for each bed such as color or lithofacies
 :::
 
-![Structure of the dataframe to build a litholog in StratigrapheR](StratigrapheR_03.png){fig-align="center" width="569"}
+![Structure of the dataframe to build a litholog in StratigrapheR](StratigrapheR_03.png){fig-align="center"}
 
 ## Building a litholog
 
@@ -72,11 +70,11 @@ you can also include other columns with anything else you find useful for each b
 
 # You may want to change your working directory for this, the example will generate .pdf and .txt files;
 # setwd()
-setwd("C:/Users/Anne-Christine/Documents/ANNECHRI2/POST/UTRECHT/Spectral ANALYSIS/StratigrapheR" )
+setwd("C:/Users/Anne-Christine/Documents/ANNECHRI2/POST/UTRECHT/Cours/2025_Coldigioco" )
 
 
 # Once we have created our file we import our data 
-Log <- read.csv("log_entier_8.csv")
+Log <- read.csv("workshop_coldigioco_Practical03_StratigrapheR_logData.csv")
 
 # StratigrapheR will take the basic data (l, r, h, id)
 
@@ -93,7 +91,7 @@ legend.Ch <- data.frame(litho = c("StC","S","DS","BS","StS", "CSt", "C", "M"),
 
 bed.legend <- left_join(Log,legend.Ch, by = "litho")
 
-# Prepare plot title("MyLog")
+# Prepare plot title("M")
 whiteSet(xlim = c(0,6), ylim = c(0,52), ytick = 5, ny = 5) 
 
 # Then, we add the polygons making the litholog. This is done with a single function identifying each polygon by the id of points. The graphical parameters of the polygons can be adapted to fit the legend, polygon by polygon.
@@ -105,7 +103,7 @@ multigons(basic.log$i, x = basic.log$xy, y = basic.log$dt,
 
 ```
 
-## Creating a hardness curve evolution.
+## Creating a lithological curve evolution out of our litholog dataframe from the hardness profile.
 
 ```{r}
 #| echo: true
@@ -146,7 +144,7 @@ plot(hard, type='l')
 
 ```
 
-## Creating a facies curve evolution
+## Creating a lithological curve evolution out of our litholog dataframe from the facies profile.
 
 ```{r}
 #| echo: true
@@ -194,7 +192,7 @@ plot(facies, type='l')
 
 ```
 
-## Plotting litholog with proxies
+## Plotting litholog with proxy
 
 ```{r}
 #| echo: true

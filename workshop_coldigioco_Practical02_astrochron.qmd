@@ -1,13 +1,12 @@
 ---
-title: "Time-Series Analysis of Paleoclimate Signals – Practical 02"
+title: "Time-Series Analysis of Paleoclimate Signals – Practical 02 - Basics on astrochron"
 title-block-banner: "darkturquoise"
 subtitle: |
-  Basics on astrochron <br>
   Coldigiocco Cyclonet Summer School 2025<br>
-  by C. Zeeden, M. Crucifix, A.C. Da Silva
 author: "Anne-Christine Da Silva"
 date: today
 bibliography: references.bib
+doi: https://doi.org/10.5281/zenodo.17020808
 format:
   html:
     embed-resources: true
@@ -26,12 +25,13 @@ We have seen some basics of R, you should now set your working directory, be abl
 
 Astrochron is a package designed for astrochronology and cyclostratigraphy, providing tools to analyze periodicities and orbital forcing in geological records.
 
-Complete information can be found there: https://cran.r-project.org/web/packages/astrochron/astrochron.pdf
+Complete information can be found there:
+[https://cran.r-project.org/web/packages/astrochron/astrochron.pdf](https://cran.r-project.org/web/packages/astrochron/astrochron.pdf)
 
 ![Map of astrochron function](MapAstrochron.png){#fig-map-astro}
 
 **Citation:**
-Meyers, S.R. (2014). Astrochron: An R Package for Astrochronology.\https://cran.r-project.org/package=astrochron
+Meyers, S.R. (2014). Astrochron: An R Package for Astrochronology.[https://cran.r-project.org/package=astrochron](https://cran.r-project.org/package=astrochron)
 
 ## How to install astrochron?
 
@@ -91,8 +91,9 @@ When doing time-series analysis it is important to have first a look on your raw
 dataAND<-getData("AND2A-clast")
 
 # we will focus on the interval between 800 and 900 m interpreted to represent relatively continuous deposition 
-dataAND89<- iso(dataAND, xmin=800, xmax=900)
+dataAND89<- iso(dataAND, xmin=800, xmax=900, verbose=F, genplot=F)
 
+dev.off()
 plot(dataAND89, type='l')
 ```
 
@@ -120,10 +121,13 @@ Now we will start basic spectral analysis with periodogram (basic fourier transf
 # here is the example of the periodogram 
 
 # it's a rather basic spectral analysis technique, without confidence level
-per_sol <- periodogram(sol_insol, output=1, verbose=F) 
+per_sol <- periodogram(sol_insol) 
 
 # MTM allows to include tapers and is combined with confidence level [@Thomson1982b]
-mtm_sol <- mtm(sol_insol, output=1, genplot=F, verbose=F) 
+mtm_sol <- mtm(sol_insol, output=1, genplot=T, verbose=F) 
+
+# you can change the output of the mtm function and then check what is inside with 
+# View(mtm_sol)
 
 ```
 
@@ -135,6 +139,9 @@ Check the help for the mtm function: You can see different arguments, including 
 Note also that when you run MTM, if you set verbose = T, the function will provide the sampling interval, number of samples, as well as the Nyquist and Rayleigh frequencies.
 :::
 
+::: {.callout-note title="? Question ?"}
+Do you see any link between the cycles and bundles you have identified visually and those that come out of the periodogram and MTM ?
+:::
 
 ## Interpolation
 
@@ -175,7 +182,8 @@ mtm_AND89_i <- mtm(dataAND89_i, output=1, genplot=F, verbose=F)
 mtm_AND89_i002 <- mtm(dataAND89_i002, output=1, genplot=F, verbose=F) 
 mtm_AND89_i02 <- mtm(dataAND89_i02, output=1, genplot=F, verbose=F)  
 
-plot(mtm_AND89_i$Frequency, mtm_AND89_i$Power, type='l', log = "y")
+plot(mtm_AND89_i$Frequency, mtm_AND89_i$Power, type='l', log = "y", 
+     xlim=c(0,10), ylim=c(0.0000001, 0.05))
 lines(mtm_AND89_i$Frequency, mtm_AND89_i$AR1_95_power, lty=2)
 
 lines(mtm_AND89_i002$Frequency, mtm_AND89_i002$Power, col='purple')
@@ -188,6 +196,11 @@ lines(mtm_AND89_i02$Frequency, mtm_AND89_i02$AR1_95_power, lty=2, col='darkturqu
 
 ```
 
+::: {.callout-tip title="Tip on plotting"}
+If you want to zoom on the low frequency band, you can change the xlim argument in the plot function. 
+:::
+
+
 ::: {.callout-note title="? Question ?"}
 What is the impact of the interpolation on the spectral analysis, when you interpolate to smaller sampling interval or higher sampling interval.
 
@@ -195,7 +208,6 @@ In both cases, what are the pros and cons ?
 :::
 
 ## Ouliers
-
 Outliers (datapoint differing from the main body of datapoints) can be problematic when applying time series analysis. Here are some way to detect those (function trim or trimAT, or delPts, see data preparation in @fig-map-astro).
 
 ```{r}
@@ -208,11 +220,10 @@ Outliers (datapoint differing from the main body of datapoints) can be problemat
 # outliers can be problematic they are different ways to remove them 
 
 # Automatically remove outliers from stratigraphic series, using 'boxplot' algorithm
-dataAND89_trim <- trim(dataAND89, genplot=F, verbose=F)
+dataAND89_trim <- trim(dataAND89, genplot=T, verbose=F)
 
 # Remove outliers from stratigraphic series, using specified threshold value
-dataAND89_trimAT<-trimAT(dataAND89, thresh=8, dir=2, genplot=F, verbose=F)
-
+dataAND89_trimAT<-trimAT(dataAND89, thresh=8, dir=2, genplot=T, verbose=F)
 
 # We interpolate our newly created stratigraphic series
 dataAND89_i<-linterp(dataAND89, genplot=F, verbose=F)
@@ -242,10 +253,6 @@ lines(mtm_AND89_trimATi$Frequency, mtm_AND89_trimATi$AR1_95_power, lty=2, col='d
 
 ::: {.callout-note title="? Question ?"}
 When we plot our mtm data, what is the difference between the data trimmed and without trimming ?
-
-What are the implications of the application of the log transform ?
-
-Are you sure that it is efficient in this case to remove the outliers ?
 :::
 
 ## Detrending
@@ -260,17 +267,30 @@ Now, we will compare different styles of detrending (see data preparation in @fi
 
 
 # Removal of linear detrending from stratigraphic series
-dataAND89_d <- detrend(dataAND89, genplot=T, verbose=F) 
+dataAND89_d <- detrend(dataAND89, genplot=T, output=1, verbose=F) 
 dataAND89_d2 <- detrend(dataAND89, genplot=F, output=2, verbose=F) 
+
+```
+
+::: {.callout-note title="? Question ?"}
+You can see that in the function detrend, the argument output can be set to 1 or 2, what does it change ?
+:::
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide  
+
 
 # Removal of lowess smoother from stratigraphic series
 dataAND89_nL <- noLow(dataAND89, smooth=0.2, genplot=T, output=1, verbose=F)
-dataAND89_nL2 <- noLow(dataAND89, smooth=0.2, genplot=F, output=2, verbose=F)
+dataAND89_nL2 <- noLow(dataAND89, smooth=0.2, genplot=T, output=2, verbose=F)
 
 # applying log allows to stabilize the variance AND89 linearize relationships to stabilize variance
 dataAND89_log<-logT(dataAND89, c=20, opt=2, genplot=T, verbose=F)
 
-
+dev.off()
 plot(dataAND89, type='l', ylim=c(-10, 20))
 lines(dataAND89_d$Depth_m, dataAND89_d$Clasts-8, col='darkturquoise')
 lines(dataAND89_d2$X1, dataAND89_d2$X2, col='darkturquoise', lty=2, lwd=2)
@@ -283,11 +303,7 @@ lines(dataAND89_log$X1, dataAND89_log$X2+17, col='darkred')
 ```
 
 ::: {.callout-note title="? Question ?"}
-We plot our data and compare it with the different detrending, can you see what is the impact of "output" in the function noLow and detrend ?
-
-Can you also see how the parameter "smooth" changes how the smoothing is applied ?
-
-How do you compare these 3 techniques to remove the variances for our case study, which one works best and why ?
+In the function noLow, can you see how the parameter "smooth" changes how the smoothing is applied ?
 :::
 
 ```{r}
@@ -321,8 +337,8 @@ lines(mtm_AND89_di$Frequency, mtm_AND89_di$AR1_95_power, lty=2, col='darkturquoi
 lines(mtm_AND89_nLi$Frequency, mtm_AND89_nLi$Power, col='purple')
 lines(mtm_AND89_nLi$Frequency, mtm_AND89_nLi$AR1_95_power, lty=2, col='purple')
 
-lines(mtm_AND89_logi$Frequency, mtm_AND89_logi$Power*1000, col='darkgreen')
-lines(mtm_AND89_logi$Frequency, mtm_AND89_logi$AR1_95_power*1000, lty=2, col='darkgreen')
+lines(mtm_AND89_logi$Frequency, mtm_AND89_logi$Power*1000, col='darkred')
+lines(mtm_AND89_logi$Frequency, mtm_AND89_logi$AR1_95_power*1000, lty=2, col='darkred')
 
 
 
@@ -334,7 +350,6 @@ What is the impact of the different detrending on the outcome of the spectral an
 :::
 
 ## Filtering
-
 Filtering a time series means removal of the spectral power at some chosen frequencies while retaining other frequencies. 
 
 A high-pass filter retains higher frequencies while removing low frequencies; a low-pass filter does the opposite.
@@ -351,9 +366,16 @@ Filtering can be done through different ways (see filtering in @fig-map-astro), 
 
 # if we zoom on our MTM, we can identify two important cycles at low frequencies 
 mtm_AND89_i <- mtm(dataAND89_i, output=1, genplot=T, verbose=T, xmin=0, xmax=1) 
+```
+We see multiple peaks in the mtm,round 0.05 1/m (corresponding to 20 m) and around 0.25 1/m (corresponding to ~4 m). 
+These two cycles have a ratios of 1/5 and have been interpreted respectively as short eccentricity and precession cycles. So the next step is to filter those cycles and to look at their amplitude modulation.  
 
-#around 0.05 1/m (corresponding to 20 m) and around 0.25 1/m (corresponding to ~4 m). 
-# These two cycles have a ratios of 1/5 and have been interpreted respectively as short eccentricity and precession cycles. 
+
+```{r}
+#| echo: true
+#| results: hide
+#| warning: false
+#| fig.show: hide 
 
 # so we can filter those 
 filterAND89_005 <- bandpass(dataAND89_i, flow=0.04, fhigh=0.06)
@@ -381,7 +403,7 @@ Can you identify were the maxima in short eccentricity are located ?
 :::
 
 
-Now we provide another dataset of CaCO3. 
+Now we provide another dataset of CaCO<sub>3</sub>. 
 
 
 
@@ -420,5 +442,5 @@ lines(hilMA_04$m, hilMA_04$envelope*2+75, col="darkorange", lwd=1.5)
 ```
 
 ::: {.callout-note title="? Question ?"}
-Can you do the same exercise. Can you identify the phase relationship ? is it the same or different ? how do you link the phrase relationship between orbital forcing with clasts and with CaCO3 ?
+Can you do the same exercise. Can you identify the phase relationship ? is it the same or different ? how do you link the phrase relationship between orbital forcing with clasts and with CaCO<sub>3</sub> ?
 ::: 

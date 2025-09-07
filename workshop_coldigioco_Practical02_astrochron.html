@@ -7,9 +7,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Anne-Christine Da Silva">
-<meta name="dcterms.date" content="2025-08-11">
+<meta name="dcterms.date" content="2025-09-07">
 
-<title>Time-Series Analysis of Paleoclimate Signals – Practical 02</title>
+<title>Time-Series Analysis of Paleoclimate Signals – Practical 02 - Basics on astrochron</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -3112,8 +3112,8 @@ background: darkturquoise;
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Time-Series Analysis of Paleoclimate Signals – Practical 02</h1>
-            <p class="subtitle lead"></p><p>Basics on astrochron <br> Coldigiocco Cyclonet Summer School 2025<br> by C. Zeeden, M. Crucifix, A.C. Da Silva</p><p></p>
+      <h1 class="title">Time-Series Analysis of Paleoclimate Signals – Practical 02 - Basics on astrochron</h1>
+            <p class="subtitle lead"></p><p>Coldigiocco Cyclonet Summer School 2025<br></p><p></p>
                       </div>
   </div>
     
@@ -3130,11 +3130,19 @@ background: darkturquoise;
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">August 11, 2025</p>
+        <p class="date">September 7, 2025</p>
       </div>
     </div>
     
       
+      <div>
+      <div class="quarto-title-meta-heading">Doi</div>
+      <div class="quarto-title-meta-contents">
+        <p class="doi">
+          <a href="https://doi.org/https://doi.org/10.5281/zenodo.17020808">https://doi.org/10.5281/zenodo.17020808</a>
+        </p>
+      </div>
+    </div>
     </div>
     
   
@@ -3171,7 +3179,7 @@ background: darkturquoise;
 <section id="what-is-astrochron" class="level2">
 <h2 class="anchored" data-anchor-id="what-is-astrochron">What is astrochron?</h2>
 <p>Astrochron is a package designed for astrochronology and cyclostratigraphy, providing tools to analyze periodicities and orbital forcing in geological records.</p>
-<p>Complete information can be found there: https://cran.r-project.org/web/packages/astrochron/astrochron.pdf</p>
+<p>Complete information can be found there: <a href="https://cran.r-project.org/web/packages/astrochron/astrochron.pdf">https://cran.r-project.org/web/packages/astrochron/astrochron.pdf</a></p>
 <div id="fig-map-astro" class="quarto-float quarto-figure quarto-figure-center anchored">
 <figure class="quarto-float quarto-float-fig figure">
 <div aria-describedby="fig-map-astro-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
@@ -3182,7 +3190,7 @@ Figure 1: Map of astrochron function
 </figcaption>
 </figure>
 </div>
-<p><strong>Citation:</strong> Meyers, S.R. (2014). Astrochron: An R Package for Astrochronology.://cran.r-project.org/package=astrochron</p>
+<p><strong>Citation:</strong> Meyers, S.R. (2014). Astrochron: An R Package for Astrochronology.<a href="https://cran.r-project.org/package=astrochron">https://cran.r-project.org/package=astrochron</a></p>
 </section>
 <section id="how-to-install-astrochron" class="level2">
 <h2 class="anchored" data-anchor-id="how-to-install-astrochron">How to install astrochron?</h2>
@@ -3233,8 +3241,10 @@ Tip on astrochron and embedded datasets
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>dataAND<span class="ot">&lt;-</span><span class="fu">getData</span>(<span class="st">&quot;AND2A-clast&quot;</span>)</span>
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="co"># we will focus on the interval between 800 and 900 m interpreted to represent relatively continuous deposition </span></span>
-<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>dataAND89<span class="ot">&lt;-</span> <span class="fu">iso</span>(dataAND, <span class="at">xmin=</span><span class="dv">800</span>, <span class="at">xmax=</span><span class="dv">900</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dataAND89, <span class="at">type=</span><span class="st">&#39;l&#39;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>dataAND89<span class="ot">&lt;-</span> <span class="fu">iso</span>(dataAND, <span class="at">xmin=</span><span class="dv">800</span>, <span class="at">xmax=</span><span class="dv">900</span>, <span class="at">verbose=</span>F, <span class="at">genplot=</span>F)</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dataAND89, <span class="at">type=</span><span class="st">&#39;l&#39;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="? Question ?">
 <div class="callout-header d-flex align-content-center">
@@ -3256,13 +3266,16 @@ Tip on astrochron and embedded datasets
 <h2 class="anchored" data-anchor-id="periodogram-and-mtm">Periodogram and MTM</h2>
 <p>Now we will start basic spectral analysis with periodogram (basic fourier transform) and Multi-Taper Method <span class="citation" data-cites="Thomson1982b">(MTM, <a href="#ref-Thomson1982b" role="doc-biblioref">Thomson 1982</a>)</span>. Astrochron includes other multiple spectral analysis techniques (see <a href="#fig-map-astro" class="quarto-xref">Figure 1</a>, spectral analysis). Today we will use mostly the MTM, but later, you can check those and compare them.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># here is the example of the periodogram </span></span>
-<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="co"># it&#39;s a rather basic spectral analysis technique, without confidence level</span></span>
-<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>per_sol <span class="ot">&lt;-</span> <span class="fu">periodogram</span>(sol_insol, <span class="at">output=</span><span class="dv">1</span>, <span class="at">verbose=</span>F) </span>
-<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="co"># MTM allows to include tapers and is combined with confidence level [@Thomson1982b]</span></span>
-<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>mtm_sol <span class="ot">&lt;-</span> <span class="fu">mtm</span>(sol_insol, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb4"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co"># here is the example of the periodogram </span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a><span class="co"># it&#39;s a rather basic spectral analysis technique, without confidence level</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>per_sol <span class="ot">&lt;-</span> <span class="fu">periodogram</span>(sol_insol) </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="co"># MTM allows to include tapers and is combined with confidence level [@Thomson1982b]</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>mtm_sol <span class="ot">&lt;-</span> <span class="fu">mtm</span>(sol_insol, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>T, <span class="at">verbose=</span>F) </span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a><span class="co"># you can change the output of the mtm function and then check what is inside with </span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="co"># View(mtm_sol)</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Tip on astrochron - mtm function">
 <div class="callout-header d-flex align-content-center">
@@ -3279,18 +3292,31 @@ Tip on astrochron - mtm function
 <p>Note also that when you run MTM, if you set verbose = T, the function will provide the sampling interval, number of samples, as well as the Nyquist and Rayleigh frequencies.</p>
 </div>
 </div>
+<div class="callout callout-style-default callout-note callout-titled" title="? Question ?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+? Question ?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>Do you see any link between the cycles and bundles you have identified visually and those that come out of the periodogram and MTM ?</p>
+</div>
+</div>
 </section>
 <section id="interpolation" class="level2">
 <h2 class="anchored" data-anchor-id="interpolation">Interpolation</h2>
 <p>We have seen that with getData and with getLaskar, we have access to some datasets. Now let’s work on the interpolation and the implications of this interpolation (see <a href="#fig-map-astro" class="quarto-xref">Figure 1</a> data preparation).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check the statistics of your data</span></span>
-<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="fu">strats</span>(dataAND89) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># then we can interpolate to the median sampling interval </span></span>
-<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>dataAND89_i <span class="ot">&lt;-</span> <span class="fu">linterp</span>(dataAND89) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we can apply a higher or lower interpolation</span></span>
-<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>dataAND89_i002 <span class="ot">&lt;-</span> <span class="fu">linterp</span>(dataAND89, <span class="at">dt=</span><span class="fl">0.02</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>dataAND89_i02 <span class="ot">&lt;-</span> <span class="fu">linterp</span>(dataAND89, <span class="at">dt=</span>.<span class="dv">2</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="co"># check the statistics of your data</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="fu">strats</span>(dataAND89) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co"># then we can interpolate to the median sampling interval </span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>dataAND89_i <span class="ot">&lt;-</span> <span class="fu">linterp</span>(dataAND89) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we can apply a higher or lower interpolation</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>dataAND89_i002 <span class="ot">&lt;-</span> <span class="fu">linterp</span>(dataAND89, <span class="at">dt=</span><span class="fl">0.02</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>dataAND89_i02 <span class="ot">&lt;-</span> <span class="fu">linterp</span>(dataAND89, <span class="at">dt=</span>.<span class="dv">2</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-tip callout-titled" title="Tip on astrochron - interpolation">
 <div class="callout-header d-flex align-content-center">
@@ -3307,19 +3333,33 @@ Tip on astrochron - interpolation
 </div>
 <p>Now that we have interpolated we can apply the MTM to our interpolated data</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>mtm_AND89_i <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_i, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F) </span>
-<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>mtm_AND89_i002 <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_i002, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F) </span>
-<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>mtm_AND89_i02 <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_i02, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)  </span>
-<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mtm_AND89_i<span class="sc">$</span>Frequency, mtm_AND89_i<span class="sc">$</span>Power, <span class="at">type=</span><span class="st">&#39;l&#39;</span>, <span class="at">log =</span> <span class="st">&quot;y&quot;</span>)</span>
-<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_i<span class="sc">$</span>Frequency, mtm_AND89_i<span class="sc">$</span>AR1_95_power, <span class="at">lty=</span><span class="dv">2</span>)</span>
-<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_i002<span class="sc">$</span>Frequency, mtm_AND89_i002<span class="sc">$</span>Power, <span class="at">col=</span><span class="st">&#39;purple&#39;</span>)</span>
-<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_i002<span class="sc">$</span>Frequency, mtm_AND89_i002<span class="sc">$</span>AR1_95_power, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&#39;purple&#39;</span>)</span>
-<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_i02<span class="sc">$</span>Frequency, mtm_AND89_i02<span class="sc">$</span>Power, <span class="at">col=</span><span class="st">&#39;darkturquoise&#39;</span>)</span>
-<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_i02<span class="sc">$</span>Frequency, mtm_AND89_i02<span class="sc">$</span>AR1_95_power, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&#39;darkturquoise&#39;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the dotted lines corresponds to the 95 % confidence level </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>mtm_AND89_i <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_i, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F) </span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>mtm_AND89_i002 <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_i002, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F) </span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>mtm_AND89_i02 <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_i02, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)  </span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mtm_AND89_i<span class="sc">$</span>Frequency, mtm_AND89_i<span class="sc">$</span>Power, <span class="at">type=</span><span class="st">&#39;l&#39;</span>, <span class="at">log =</span> <span class="st">&quot;y&quot;</span>, </span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>     <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>,<span class="dv">10</span>), <span class="at">ylim=</span><span class="fu">c</span>(<span class="fl">0.0000001</span>, <span class="fl">0.05</span>))</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_i<span class="sc">$</span>Frequency, mtm_AND89_i<span class="sc">$</span>AR1_95_power, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_i002<span class="sc">$</span>Frequency, mtm_AND89_i002<span class="sc">$</span>Power, <span class="at">col=</span><span class="st">&#39;purple&#39;</span>)</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_i002<span class="sc">$</span>Frequency, mtm_AND89_i002<span class="sc">$</span>AR1_95_power, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&#39;purple&#39;</span>)</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_i02<span class="sc">$</span>Frequency, mtm_AND89_i02<span class="sc">$</span>Power, <span class="at">col=</span><span class="st">&#39;darkturquoise&#39;</span>)</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_i02<span class="sc">$</span>Frequency, mtm_AND89_i02<span class="sc">$</span>AR1_95_power, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&#39;darkturquoise&#39;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co"># the dotted lines corresponds to the 95 % confidence level </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-tip callout-titled" title="Tip on plotting">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+Tip on plotting
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>If you want to zoom on the low frequency band, you can change the xlim argument in the plot function.</p>
+</div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="? Question ?">
 <div class="callout-header d-flex align-content-center">
@@ -3340,35 +3380,32 @@ Tip on astrochron - interpolation
 <h2 class="anchored" data-anchor-id="ouliers">Ouliers</h2>
 <p>Outliers (datapoint differing from the main body of datapoints) can be problematic when applying time series analysis. Here are some way to detect those (function trim or trimAT, or delPts, see data preparation in <a href="#fig-map-astro" class="quarto-xref">Figure 1</a>).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># outliers can be problematic they are different ways to remove them </span></span>
-<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Automatically remove outliers from stratigraphic series, using &#39;boxplot&#39; algorithm</span></span>
-<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>dataAND89_trim <span class="ot">&lt;-</span> <span class="fu">trim</span>(dataAND89, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)</span>
-<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove outliers from stratigraphic series, using specified threshold value</span></span>
-<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>dataAND89_trimAT<span class="ot">&lt;-</span><span class="fu">trimAT</span>(dataAND89, <span class="at">thresh=</span><span class="dv">8</span>, <span class="at">dir=</span><span class="dv">2</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)</span>
-<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co"># We interpolate our newly created stratigraphic series</span></span>
-<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a>dataAND89_i<span class="ot">&lt;-</span><span class="fu">linterp</span>(dataAND89, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)</span>
-<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a>dataAND89_trimi<span class="ot">&lt;-</span><span class="fu">linterp</span>(dataAND89_trim, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)</span>
-<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a>dataAND89_trimATi<span class="ot">&lt;-</span><span class="fu">linterp</span>(dataAND89_trimAT, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)</span>
-<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a><span class="co"># We do spectral analysis on those data and compare the different interpolations</span></span>
-<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>mtm_AND89_i <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_i, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F) </span>
-<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>mtm_AND89_trimi <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_trimi, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)</span>
-<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a>mtm_AND89_trimATi <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_trimATi, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)  </span>
-<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a><span class="co"># We plot the different MTM for easier comparison </span></span>
-<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mtm_AND89_i<span class="sc">$</span>Frequency, mtm_AND89_i<span class="sc">$</span>Power, <span class="at">type=</span><span class="st">&#39;l&#39;</span>, <span class="at">log =</span> <span class="st">&quot;y&quot;</span>)</span>
-<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_i<span class="sc">$</span>Frequency, mtm_AND89_i<span class="sc">$</span>AR1_95_power, <span class="at">lty=</span><span class="dv">2</span>)</span>
-<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_trimi<span class="sc">$</span>Frequency, mtm_AND89_trimi<span class="sc">$</span>Power, <span class="at">col=</span><span class="st">&#39;purple&#39;</span>)</span>
-<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_trimi<span class="sc">$</span>Frequency, mtm_AND89_trimi<span class="sc">$</span>AR1_95_power, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&#39;purple&#39;</span>)</span>
-<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_trimATi<span class="sc">$</span>Frequency, mtm_AND89_trimATi<span class="sc">$</span>Power, <span class="at">col=</span><span class="st">&#39;darkturquoise&#39;</span>)</span>
-<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_trimATi<span class="sc">$</span>Frequency, mtm_AND89_trimATi<span class="sc">$</span>AR1_95_power, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&#39;darkturquoise&#39;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># outliers can be problematic they are different ways to remove them </span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Automatically remove outliers from stratigraphic series, using &#39;boxplot&#39; algorithm</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>dataAND89_trim <span class="ot">&lt;-</span> <span class="fu">trim</span>(dataAND89, <span class="at">genplot=</span>T, <span class="at">verbose=</span>F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Remove outliers from stratigraphic series, using specified threshold value</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>dataAND89_trimAT<span class="ot">&lt;-</span><span class="fu">trimAT</span>(dataAND89, <span class="at">thresh=</span><span class="dv">8</span>, <span class="at">dir=</span><span class="dv">2</span>, <span class="at">genplot=</span>T, <span class="at">verbose=</span>F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># We interpolate our newly created stratigraphic series</span></span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>dataAND89_i<span class="ot">&lt;-</span><span class="fu">linterp</span>(dataAND89, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>dataAND89_trimi<span class="ot">&lt;-</span><span class="fu">linterp</span>(dataAND89_trim, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>dataAND89_trimATi<span class="ot">&lt;-</span><span class="fu">linterp</span>(dataAND89_trimAT, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a><span class="co"># We do spectral analysis on those data and compare the different interpolations</span></span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>mtm_AND89_i <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_i, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F) </span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>mtm_AND89_trimi <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_trimi, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>mtm_AND89_trimATi <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_trimATi, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)  </span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-11"><a href="#cb13-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-12"><a href="#cb13-12" aria-hidden="true" tabindex="-1"></a><span class="co"># We plot the different MTM for easier comparison </span></span>
+<span id="cb13-13"><a href="#cb13-13" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mtm_AND89_i<span class="sc">$</span>Frequency, mtm_AND89_i<span class="sc">$</span>Power, <span class="at">type=</span><span class="st">&#39;l&#39;</span>, <span class="at">log =</span> <span class="st">&quot;y&quot;</span>)</span>
+<span id="cb13-14"><a href="#cb13-14" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_i<span class="sc">$</span>Frequency, mtm_AND89_i<span class="sc">$</span>AR1_95_power, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb13-15"><a href="#cb13-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-16"><a href="#cb13-16" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_trimi<span class="sc">$</span>Frequency, mtm_AND89_trimi<span class="sc">$</span>Power, <span class="at">col=</span><span class="st">&#39;purple&#39;</span>)</span>
+<span id="cb13-17"><a href="#cb13-17" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_trimi<span class="sc">$</span>Frequency, mtm_AND89_trimi<span class="sc">$</span>AR1_95_power, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&#39;purple&#39;</span>)</span>
+<span id="cb13-18"><a href="#cb13-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb13-19"><a href="#cb13-19" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_trimATi<span class="sc">$</span>Frequency, mtm_AND89_trimATi<span class="sc">$</span>Power, <span class="at">col=</span><span class="st">&#39;darkturquoise&#39;</span>)</span>
+<span id="cb13-20"><a href="#cb13-20" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_trimATi<span class="sc">$</span>Frequency, mtm_AND89_trimATi<span class="sc">$</span>AR1_95_power, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&#39;darkturquoise&#39;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="? Question ?">
 <div class="callout-header d-flex align-content-center">
@@ -3381,8 +3418,6 @@ Tip on astrochron - interpolation
 </div>
 <div class="callout-body-container callout-body">
 <p>When we plot our mtm data, what is the difference between the data trimmed and without trimming ?</p>
-<p>What are the implications of the application of the log transform ?</p>
-<p>Are you sure that it is efficient in this case to remove the outliers ?</p>
 </div>
 </div>
 </section>
@@ -3390,24 +3425,9 @@ Tip on astrochron - interpolation
 <h2 class="anchored" data-anchor-id="detrending">Detrending</h2>
 <p>Now, we will compare different styles of detrending (see data preparation in <a href="#fig-map-astro" class="quarto-xref">Figure 1</a>).</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb13"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Removal of linear detrending from stratigraphic series</span></span>
-<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>dataAND89_d <span class="ot">&lt;-</span> <span class="fu">detrend</span>(dataAND89, <span class="at">genplot=</span>T, <span class="at">verbose=</span>F) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>dataAND89_d2 <span class="ot">&lt;-</span> <span class="fu">detrend</span>(dataAND89, <span class="at">genplot=</span>F, <span class="at">output=</span><span class="dv">2</span>, <span class="at">verbose=</span>F) </span>
-<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a><span class="co"># Removal of lowess smoother from stratigraphic series</span></span>
-<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>dataAND89_nL <span class="ot">&lt;-</span> <span class="fu">noLow</span>(dataAND89, <span class="at">smooth=</span><span class="fl">0.2</span>, <span class="at">genplot=</span>T, <span class="at">output=</span><span class="dv">1</span>, <span class="at">verbose=</span>F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dataAND89_nL2 <span class="ot">&lt;-</span> <span class="fu">noLow</span>(dataAND89, <span class="at">smooth=</span><span class="fl">0.2</span>, <span class="at">genplot=</span>F, <span class="at">output=</span><span class="dv">2</span>, <span class="at">verbose=</span>F)</span>
-<span id="cb15-2"><a href="#cb15-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb15-3"><a href="#cb15-3" aria-hidden="true" tabindex="-1"></a><span class="co"># applying log allows to stabilize the variance AND89 linearize relationships to stabilize variance</span></span>
-<span id="cb15-4"><a href="#cb15-4" aria-hidden="true" tabindex="-1"></a>dataAND89_log<span class="ot">&lt;-</span><span class="fu">logT</span>(dataAND89, <span class="at">c=</span><span class="dv">20</span>, <span class="at">opt=</span><span class="dv">2</span>, <span class="at">genplot=</span>T, <span class="at">verbose=</span>F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dataAND89, <span class="at">type=</span><span class="st">&#39;l&#39;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">20</span>))</span>
-<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(dataAND89_d<span class="sc">$</span>Depth_m, dataAND89_d<span class="sc">$</span>Clasts<span class="dv">-8</span>, <span class="at">col=</span><span class="st">&#39;darkturquoise&#39;</span>)</span>
-<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(dataAND89_d2<span class="sc">$</span>X1, dataAND89_d2<span class="sc">$</span>X2, <span class="at">col=</span><span class="st">&#39;darkturquoise&#39;</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
-<span id="cb16-4"><a href="#cb16-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(dataAND89_nL<span class="sc">$</span>Depth_m, dataAND89_nL<span class="sc">$</span>Clasts<span class="sc">+</span><span class="dv">10</span>, <span class="at">col=</span><span class="st">&#39;purple&#39;</span>)</span>
-<span id="cb16-5"><a href="#cb16-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(dataAND89_nL2<span class="sc">$</span>Depth_m, dataAND89_nL2<span class="sc">$</span>Clasts, <span class="at">col=</span><span class="st">&#39;purple&#39;</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
-<span id="cb16-6"><a href="#cb16-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(dataAND89_log<span class="sc">$</span>X1, dataAND89_log<span class="sc">$</span>X2<span class="sc">+</span><span class="dv">17</span>, <span class="at">col=</span><span class="st">&#39;darkred&#39;</span>)</span>
-<span id="cb16-7"><a href="#cb16-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb16-8"><a href="#cb16-8" aria-hidden="true" tabindex="-1"></a><span class="co"># The different datasets have been shifted for better visual </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Removal of linear detrending from stratigraphic series</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>dataAND89_d <span class="ot">&lt;-</span> <span class="fu">detrend</span>(dataAND89, <span class="at">genplot=</span>T, <span class="at">output=</span><span class="dv">1</span>, <span class="at">verbose=</span>F) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb15"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>dataAND89_d2 <span class="ot">&lt;-</span> <span class="fu">detrend</span>(dataAND89, <span class="at">genplot=</span>F, <span class="at">output=</span><span class="dv">2</span>, <span class="at">verbose=</span>F) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="? Question ?">
 <div class="callout-header d-flex align-content-center">
@@ -3419,38 +3439,66 @@ Tip on astrochron - interpolation
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>We plot our data and compare it with the different detrending, can you see what is the impact of “output” in the function noLow and detrend ?</p>
-<p>Can you also see how the parameter “smooth” changes how the smoothing is applied ?</p>
-<p>How do you compare these 3 techniques to remove the variances for our case study, which one works best and why ?</p>
+<p>You can see that in the function detrend, the argument output can be set to 1 or 2, what does it change ?</p>
 </div>
 </div>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="co"># now we interpolate our detrended signals </span></span>
-<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>dataAND89_i<span class="ot">&lt;-</span><span class="fu">linterp</span>(dataAND89, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)</span>
-<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>dataAND89_di<span class="ot">&lt;-</span><span class="fu">linterp</span>(dataAND89_d, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)</span>
-<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>dataAND89_nLi<span class="ot">&lt;-</span><span class="fu">linterp</span>(dataAND89_nL, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)</span>
-<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>dataAND89_logi<span class="ot">&lt;-</span><span class="fu">linterp</span>(dataAND89_log, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)</span>
-<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a><span class="co"># now let&#39;s do spectral analysis on those data and compare </span></span>
-<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>mtm_AND89_i <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_i, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F) </span>
-<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>mtm_AND89_di <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_di, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F) </span>
-<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>mtm_AND89_nLi <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_nLi, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F) </span>
-<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a>mtm_AND89_logi <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_logi, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F) </span>
-<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mtm_AND89_i<span class="sc">$</span>Frequency, mtm_AND89_i<span class="sc">$</span>Power, <span class="at">type=</span><span class="st">&#39;l&#39;</span>, <span class="at">log =</span> <span class="st">&quot;y&quot;</span>, </span>
-<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim=</span><span class="fu">c</span>(<span class="fl">5e-5</span>, <span class="fl">5e-2</span>), <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
-<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_i<span class="sc">$</span>Frequency, mtm_AND89_i<span class="sc">$</span>AR1_95_power, <span class="at">lty=</span><span class="dv">2</span>)</span>
-<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_di<span class="sc">$</span>Frequency, mtm_AND89_di<span class="sc">$</span>Power, <span class="at">col=</span><span class="st">&#39;darkturquoise&#39;</span>)</span>
-<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_di<span class="sc">$</span>Frequency, mtm_AND89_di<span class="sc">$</span>AR1_95_power, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&#39;darkturquoise&#39;</span>)</span>
-<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_nLi<span class="sc">$</span>Frequency, mtm_AND89_nLi<span class="sc">$</span>Power, <span class="at">col=</span><span class="st">&#39;purple&#39;</span>)</span>
-<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_nLi<span class="sc">$</span>Frequency, mtm_AND89_nLi<span class="sc">$</span>AR1_95_power, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&#39;purple&#39;</span>)</span>
-<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_logi<span class="sc">$</span>Frequency, mtm_AND89_logi<span class="sc">$</span>Power<span class="sc">*</span><span class="dv">1000</span>, <span class="at">col=</span><span class="st">&#39;darkgreen&#39;</span>)</span>
-<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_logi<span class="sc">$</span>Frequency, mtm_AND89_logi<span class="sc">$</span>AR1_95_power<span class="sc">*</span><span class="dv">1000</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&#39;darkgreen&#39;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Removal of lowess smoother from stratigraphic series</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>dataAND89_nL <span class="ot">&lt;-</span> <span class="fu">noLow</span>(dataAND89, <span class="at">smooth=</span><span class="fl">0.2</span>, <span class="at">genplot=</span>T, <span class="at">output=</span><span class="dv">1</span>, <span class="at">verbose=</span>F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb17"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>dataAND89_nL2 <span class="ot">&lt;-</span> <span class="fu">noLow</span>(dataAND89, <span class="at">smooth=</span><span class="fl">0.2</span>, <span class="at">genplot=</span>T, <span class="at">output=</span><span class="dv">2</span>, <span class="at">verbose=</span>F)</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a><span class="co"># applying log allows to stabilize the variance AND89 linearize relationships to stabilize variance</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>dataAND89_log<span class="ot">&lt;-</span><span class="fu">logT</span>(dataAND89, <span class="at">c=</span><span class="dv">20</span>, <span class="at">opt=</span><span class="dv">2</span>, <span class="at">genplot=</span>T, <span class="at">verbose=</span>F)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dataAND89, <span class="at">type=</span><span class="st">&#39;l&#39;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="sc">-</span><span class="dv">10</span>, <span class="dv">20</span>))</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(dataAND89_d<span class="sc">$</span>Depth_m, dataAND89_d<span class="sc">$</span>Clasts<span class="dv">-8</span>, <span class="at">col=</span><span class="st">&#39;darkturquoise&#39;</span>)</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(dataAND89_d2<span class="sc">$</span>X1, dataAND89_d2<span class="sc">$</span>X2, <span class="at">col=</span><span class="st">&#39;darkturquoise&#39;</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(dataAND89_nL<span class="sc">$</span>Depth_m, dataAND89_nL<span class="sc">$</span>Clasts<span class="sc">+</span><span class="dv">10</span>, <span class="at">col=</span><span class="st">&#39;purple&#39;</span>)</span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(dataAND89_nL2<span class="sc">$</span>Depth_m, dataAND89_nL2<span class="sc">$</span>Clasts, <span class="at">col=</span><span class="st">&#39;purple&#39;</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">lwd=</span><span class="dv">2</span>)</span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(dataAND89_log<span class="sc">$</span>X1, dataAND89_log<span class="sc">$</span>X2<span class="sc">+</span><span class="dv">17</span>, <span class="at">col=</span><span class="st">&#39;darkred&#39;</span>)</span>
+<span id="cb18-8"><a href="#cb18-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb18-9"><a href="#cb18-9" aria-hidden="true" tabindex="-1"></a><span class="co"># The different datasets have been shifted for better visual </span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<div class="callout callout-style-default callout-note callout-titled" title="? Question ?">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+? Question ?
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>In the function noLow, can you see how the parameter “smooth” changes how the smoothing is applied ?</p>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co"># now we interpolate our detrended signals </span></span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>dataAND89_i<span class="ot">&lt;-</span><span class="fu">linterp</span>(dataAND89, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>dataAND89_di<span class="ot">&lt;-</span><span class="fu">linterp</span>(dataAND89_d, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>dataAND89_nLi<span class="ot">&lt;-</span><span class="fu">linterp</span>(dataAND89_nL, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>dataAND89_logi<span class="ot">&lt;-</span><span class="fu">linterp</span>(dataAND89_log, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a><span class="co"># now let&#39;s do spectral analysis on those data and compare </span></span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>mtm_AND89_i <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_i, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F) </span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>mtm_AND89_di <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_di, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F) </span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>mtm_AND89_nLi <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_nLi, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F) </span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a>mtm_AND89_logi <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_logi, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>F, <span class="at">verbose=</span>F) </span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mtm_AND89_i<span class="sc">$</span>Frequency, mtm_AND89_i<span class="sc">$</span>Power, <span class="at">type=</span><span class="st">&#39;l&#39;</span>, <span class="at">log =</span> <span class="st">&quot;y&quot;</span>, </span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>     <span class="at">ylim=</span><span class="fu">c</span>(<span class="fl">5e-5</span>, <span class="fl">5e-2</span>), <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>))</span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_i<span class="sc">$</span>Frequency, mtm_AND89_i<span class="sc">$</span>AR1_95_power, <span class="at">lty=</span><span class="dv">2</span>)</span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_di<span class="sc">$</span>Frequency, mtm_AND89_di<span class="sc">$</span>Power, <span class="at">col=</span><span class="st">&#39;darkturquoise&#39;</span>)</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_di<span class="sc">$</span>Frequency, mtm_AND89_di<span class="sc">$</span>AR1_95_power, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&#39;darkturquoise&#39;</span>)</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_nLi<span class="sc">$</span>Frequency, mtm_AND89_nLi<span class="sc">$</span>Power, <span class="at">col=</span><span class="st">&#39;purple&#39;</span>)</span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_nLi<span class="sc">$</span>Frequency, mtm_AND89_nLi<span class="sc">$</span>AR1_95_power, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&#39;purple&#39;</span>)</span>
+<span id="cb19-24"><a href="#cb19-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-25"><a href="#cb19-25" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_logi<span class="sc">$</span>Frequency, mtm_AND89_logi<span class="sc">$</span>Power<span class="sc">*</span><span class="dv">1000</span>, <span class="at">col=</span><span class="st">&#39;darkred&#39;</span>)</span>
+<span id="cb19-26"><a href="#cb19-26" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(mtm_AND89_logi<span class="sc">$</span>Frequency, mtm_AND89_logi<span class="sc">$</span>AR1_95_power<span class="sc">*</span><span class="dv">1000</span>, <span class="at">lty=</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&#39;darkred&#39;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="? Question ?">
 <div class="callout-header d-flex align-content-center">
@@ -3473,22 +3521,22 @@ Tip on astrochron - interpolation
 <p>A band-pass filter removes all frequencies outside a prespecified band.</p>
 <p>Filtering can be done through different ways (see filtering in <a href="#fig-map-astro" class="quarto-xref">Figure 1</a>), including the classically used “bandpass” and “taner”.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a><span class="co"># if we zoom on our MTM, we can identify two important cycles at low frequencies </span></span>
-<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>mtm_AND89_i <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_i, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>T, <span class="at">verbose=</span>T, <span class="at">xmin=</span><span class="dv">0</span>, <span class="at">xmax=</span><span class="dv">1</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode cell-code" id="cb19"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a><span class="co">#around 0.05 1/m (corresponding to 20 m) and around 0.25 1/m (corresponding to ~4 m). </span></span>
-<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a><span class="co"># These two cycles have a ratios of 1/5 and have been interpreted respectively as short eccentricity and precession cycles. </span></span>
-<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a><span class="co"># so we can filter those </span></span>
-<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>filterAND89_005 <span class="ot">&lt;-</span> <span class="fu">bandpass</span>(dataAND89_i, <span class="at">flow=</span><span class="fl">0.04</span>, <span class="at">fhigh=</span><span class="fl">0.06</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>filterAND89_025 <span class="ot">&lt;-</span> <span class="fu">bandpass</span>(dataAND89_i, <span class="at">flow=</span><span class="fl">0.19</span>, <span class="at">fhigh=</span><span class="fl">0.31</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we also want to look at the enveloppe of the precession cycles. </span></span>
-<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a><span class="co"># This is done through the Hilbert Transform </span></span>
-<span id="cb21-3"><a href="#cb21-3" aria-hidden="true" tabindex="-1"></a>hilAND89_025 <span class="ot">&lt;-</span> <span class="fu">hilbert</span>(filterAND89_025)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
-<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dataAND89_i, <span class="at">type=</span><span class="st">&#39;l&#39;</span>)</span>
-<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(filterAND89_005<span class="sc">$</span>Depth_m, filterAND89_005<span class="sc">$</span>Clasts<span class="sc">+</span><span class="dv">10</span>, <span class="at">col=</span><span class="st">&quot;purple&quot;</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
-<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(filterAND89_025<span class="sc">$</span>Depth_m, filterAND89_025<span class="sc">$</span>Clasts<span class="sc">+</span><span class="dv">8</span>, <span class="at">col=</span><span class="st">&quot;darkturquoise&quot;</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
-<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(hilAND89_025<span class="sc">$</span>Depth_m, hilAND89_025<span class="sc">$</span>envelope<span class="sc">+</span><span class="dv">10</span>, <span class="at">col=</span><span class="st">&quot;darkturquoise&quot;</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="co"># if we zoom on our MTM, we can identify two important cycles at low frequencies </span></span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>mtm_AND89_i <span class="ot">&lt;-</span> <span class="fu">mtm</span>(dataAND89_i, <span class="at">output=</span><span class="dv">1</span>, <span class="at">genplot=</span>T, <span class="at">verbose=</span>T, <span class="at">xmin=</span><span class="dv">0</span>, <span class="at">xmax=</span><span class="dv">1</span>) </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p>We see multiple peaks in the mtm,round 0.05 1/m (corresponding to 20 m) and around 0.25 1/m (corresponding to ~4 m). These two cycles have a ratios of 1/5 and have been interpreted respectively as short eccentricity and precession cycles. So the next step is to filter those cycles and to look at their amplitude modulation.</p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb21"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a><span class="co"># so we can filter those </span></span>
+<span id="cb21-2"><a href="#cb21-2" aria-hidden="true" tabindex="-1"></a>filterAND89_005 <span class="ot">&lt;-</span> <span class="fu">bandpass</span>(dataAND89_i, <span class="at">flow=</span><span class="fl">0.04</span>, <span class="at">fhigh=</span><span class="fl">0.06</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>filterAND89_025 <span class="ot">&lt;-</span> <span class="fu">bandpass</span>(dataAND89_i, <span class="at">flow=</span><span class="fl">0.19</span>, <span class="at">fhigh=</span><span class="fl">0.31</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="co"># we also want to look at the enveloppe of the precession cycles. </span></span>
+<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a><span class="co"># This is done through the Hilbert Transform </span></span>
+<span id="cb23-3"><a href="#cb23-3" aria-hidden="true" tabindex="-1"></a>hilAND89_025 <span class="ot">&lt;-</span> <span class="fu">hilbert</span>(filterAND89_025)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
+<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(dataAND89_i, <span class="at">type=</span><span class="st">&#39;l&#39;</span>)</span>
+<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(filterAND89_005<span class="sc">$</span>Depth_m, filterAND89_005<span class="sc">$</span>Clasts<span class="sc">+</span><span class="dv">10</span>, <span class="at">col=</span><span class="st">&quot;purple&quot;</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(filterAND89_025<span class="sc">$</span>Depth_m, filterAND89_025<span class="sc">$</span>Clasts<span class="sc">+</span><span class="dv">8</span>, <span class="at">col=</span><span class="st">&quot;darkturquoise&quot;</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(hilAND89_025<span class="sc">$</span>Depth_m, hilAND89_025<span class="sc">$</span>envelope<span class="sc">+</span><span class="dv">10</span>, <span class="at">col=</span><span class="st">&quot;darkturquoise&quot;</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="? Question ?">
 <div class="callout-header d-flex align-content-center">
@@ -3505,31 +3553,31 @@ Tip on astrochron - interpolation
 <p>Can you identify were the maxima in short eccentricity are located ?</p>
 </div>
 </div>
-<p>Now we provide another dataset of CaCO3.</p>
+<p>Now we provide another dataset of CaCO<sub>3</sub>.</p>
 <div class="cell">
-<div class="sourceCode cell-code" id="cb23"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(modelA)</span>
-<span id="cb23-2"><a href="#cb23-2" aria-hidden="true" tabindex="-1"></a>Mai<span class="ot">&lt;-</span><span class="fu">linterp</span>(modelA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
-<span id="cb24-2"><a href="#cb24-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Mai, <span class="at">type=</span><span class="st">&#39;l&#39;</span>)</span>
-<span id="cb24-3"><a href="#cb24-3" aria-hidden="true" tabindex="-1"></a>MTM_MA<span class="ot">&lt;-</span><span class="fu">mtm</span>(Mai, <span class="at">output=</span><span class="dv">1</span>, <span class="at">siglevel=</span>.<span class="dv">8</span>)</span>
-<span id="cb24-4"><a href="#cb24-4" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-5"><a href="#cb24-5" aria-hidden="true" tabindex="-1"></a><span class="co"># so we can filter those </span></span>
-<span id="cb24-6"><a href="#cb24-6" aria-hidden="true" tabindex="-1"></a>filterMA_65 <span class="ot">&lt;-</span> <span class="fu">bandpass</span>(Mai, <span class="at">flow=</span><span class="dv">1</span><span class="sc">/</span><span class="fl">6.1</span>, <span class="at">fhigh=</span><span class="dv">1</span><span class="sc">/</span><span class="fl">6.9</span>)</span>
-<span id="cb24-7"><a href="#cb24-7" aria-hidden="true" tabindex="-1"></a>filterMA_14 <span class="ot">&lt;-</span> <span class="fu">bandpass</span>(Mai, <span class="at">flow=</span><span class="dv">1</span><span class="sc">/</span><span class="fl">1.225</span>, <span class="at">fhigh=</span><span class="dv">1</span><span class="sc">/</span><span class="fl">2.125</span>)</span>
-<span id="cb24-8"><a href="#cb24-8" aria-hidden="true" tabindex="-1"></a>filterMA_04 <span class="ot">&lt;-</span> <span class="fu">bandpass</span>(Mai, <span class="at">flow=</span><span class="dv">1</span><span class="sc">/</span><span class="fl">0.28</span>, <span class="at">fhigh=</span><span class="dv">1</span><span class="sc">/</span><span class="fl">0.37</span>)</span>
-<span id="cb24-9"><a href="#cb24-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-10"><a href="#cb24-10" aria-hidden="true" tabindex="-1"></a><span class="co"># we also want to look at the enveloppe of the precession cycles. </span></span>
-<span id="cb24-11"><a href="#cb24-11" aria-hidden="true" tabindex="-1"></a><span class="co"># This is done through the Hilbert Transform </span></span>
-<span id="cb24-12"><a href="#cb24-12" aria-hidden="true" tabindex="-1"></a>hilMA_14 <span class="ot">&lt;-</span> <span class="fu">hilbert</span>(filterMA_14)</span>
-<span id="cb24-13"><a href="#cb24-13" aria-hidden="true" tabindex="-1"></a>hilMA_04 <span class="ot">&lt;-</span> <span class="fu">hilbert</span>(filterMA_04)</span>
-<span id="cb24-14"><a href="#cb24-14" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb24-15"><a href="#cb24-15" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
-<span id="cb24-16"><a href="#cb24-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Mai, <span class="at">type=</span><span class="st">&#39;l&#39;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">120</span>), <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">40</span>))</span>
-<span id="cb24-17"><a href="#cb24-17" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(filterMA_65<span class="sc">$</span>m, filterMA_65<span class="sc">$</span>CaCO3<span class="sc">+</span><span class="dv">78</span>, <span class="at">col=</span><span class="st">&quot;purple&quot;</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
-<span id="cb24-18"><a href="#cb24-18" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(filterMA_14<span class="sc">$</span>m, filterMA_14<span class="sc">$</span>CaCO3<span class="sc">+</span><span class="dv">55</span>, <span class="at">col=</span><span class="st">&quot;darkturquoise&quot;</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
-<span id="cb24-19"><a href="#cb24-19" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(hilMA_14<span class="sc">$</span>m, hilMA_14<span class="sc">$</span>envelope<span class="sc">+</span><span class="dv">93</span>, <span class="at">col=</span><span class="st">&quot;darkturquoise&quot;</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
-<span id="cb24-20"><a href="#cb24-20" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(filterMA_04<span class="sc">$</span>m, filterMA_04<span class="sc">$</span>CaCO3<span class="sc">*</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&quot;darkorange&quot;</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
-<span id="cb24-21"><a href="#cb24-21" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(hilMA_04<span class="sc">$</span>m, hilMA_04<span class="sc">$</span>envelope<span class="sc">*</span><span class="dv">2</span><span class="sc">+</span><span class="dv">75</span>, <span class="at">col=</span><span class="st">&quot;darkorange&quot;</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb25"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="fu">data</span>(modelA)</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>Mai<span class="ot">&lt;-</span><span class="fu">linterp</span>(modelA)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Mai, <span class="at">type=</span><span class="st">&#39;l&#39;</span>)</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>MTM_MA<span class="ot">&lt;-</span><span class="fu">mtm</span>(Mai, <span class="at">output=</span><span class="dv">1</span>, <span class="at">siglevel=</span>.<span class="dv">8</span>)</span>
+<span id="cb26-4"><a href="#cb26-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="#cb26-5" aria-hidden="true" tabindex="-1"></a><span class="co"># so we can filter those </span></span>
+<span id="cb26-6"><a href="#cb26-6" aria-hidden="true" tabindex="-1"></a>filterMA_65 <span class="ot">&lt;-</span> <span class="fu">bandpass</span>(Mai, <span class="at">flow=</span><span class="dv">1</span><span class="sc">/</span><span class="fl">6.1</span>, <span class="at">fhigh=</span><span class="dv">1</span><span class="sc">/</span><span class="fl">6.9</span>)</span>
+<span id="cb26-7"><a href="#cb26-7" aria-hidden="true" tabindex="-1"></a>filterMA_14 <span class="ot">&lt;-</span> <span class="fu">bandpass</span>(Mai, <span class="at">flow=</span><span class="dv">1</span><span class="sc">/</span><span class="fl">1.225</span>, <span class="at">fhigh=</span><span class="dv">1</span><span class="sc">/</span><span class="fl">2.125</span>)</span>
+<span id="cb26-8"><a href="#cb26-8" aria-hidden="true" tabindex="-1"></a>filterMA_04 <span class="ot">&lt;-</span> <span class="fu">bandpass</span>(Mai, <span class="at">flow=</span><span class="dv">1</span><span class="sc">/</span><span class="fl">0.28</span>, <span class="at">fhigh=</span><span class="dv">1</span><span class="sc">/</span><span class="fl">0.37</span>)</span>
+<span id="cb26-9"><a href="#cb26-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-10"><a href="#cb26-10" aria-hidden="true" tabindex="-1"></a><span class="co"># we also want to look at the enveloppe of the precession cycles. </span></span>
+<span id="cb26-11"><a href="#cb26-11" aria-hidden="true" tabindex="-1"></a><span class="co"># This is done through the Hilbert Transform </span></span>
+<span id="cb26-12"><a href="#cb26-12" aria-hidden="true" tabindex="-1"></a>hilMA_14 <span class="ot">&lt;-</span> <span class="fu">hilbert</span>(filterMA_14)</span>
+<span id="cb26-13"><a href="#cb26-13" aria-hidden="true" tabindex="-1"></a>hilMA_04 <span class="ot">&lt;-</span> <span class="fu">hilbert</span>(filterMA_04)</span>
+<span id="cb26-14"><a href="#cb26-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb26-15"><a href="#cb26-15" aria-hidden="true" tabindex="-1"></a><span class="fu">dev.off</span>()</span>
+<span id="cb26-16"><a href="#cb26-16" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(Mai, <span class="at">type=</span><span class="st">&#39;l&#39;</span>, <span class="at">ylim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">120</span>), <span class="at">xlim=</span><span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">40</span>))</span>
+<span id="cb26-17"><a href="#cb26-17" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(filterMA_65<span class="sc">$</span>m, filterMA_65<span class="sc">$</span>CaCO3<span class="sc">+</span><span class="dv">78</span>, <span class="at">col=</span><span class="st">&quot;purple&quot;</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb26-18"><a href="#cb26-18" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(filterMA_14<span class="sc">$</span>m, filterMA_14<span class="sc">$</span>CaCO3<span class="sc">+</span><span class="dv">55</span>, <span class="at">col=</span><span class="st">&quot;darkturquoise&quot;</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb26-19"><a href="#cb26-19" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(hilMA_14<span class="sc">$</span>m, hilMA_14<span class="sc">$</span>envelope<span class="sc">+</span><span class="dv">93</span>, <span class="at">col=</span><span class="st">&quot;darkturquoise&quot;</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb26-20"><a href="#cb26-20" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(filterMA_04<span class="sc">$</span>m, filterMA_04<span class="sc">$</span>CaCO3<span class="sc">*</span><span class="dv">2</span>, <span class="at">col=</span><span class="st">&quot;darkorange&quot;</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span>
+<span id="cb26-21"><a href="#cb26-21" aria-hidden="true" tabindex="-1"></a><span class="fu">lines</span>(hilMA_04<span class="sc">$</span>m, hilMA_04<span class="sc">$</span>envelope<span class="sc">*</span><span class="dv">2</span><span class="sc">+</span><span class="dv">75</span>, <span class="at">col=</span><span class="st">&quot;darkorange&quot;</span>, <span class="at">lwd=</span><span class="fl">1.5</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
 <div class="callout callout-style-default callout-note callout-titled" title="? Question ?">
 <div class="callout-header d-flex align-content-center">
@@ -3541,7 +3589,7 @@ Tip on astrochron - interpolation
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Can you do the same exercise. Can you identify the phase relationship ? is it the same or different ? how do you link the phrase relationship between orbital forcing with clasts and with CaCO3 ?</p>
+<p>Can you do the same exercise. Can you identify the phase relationship ? is it the same or different ? how do you link the phrase relationship between orbital forcing with clasts and with CaCO<sub>3</sub> ?</p>
 </div>
 </div>
 

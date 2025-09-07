@@ -6,10 +6,10 @@
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
-<meta name="author" content="Anne-Christine Da Silva &amp; Michiel Arts">
-<meta name="dcterms.date" content="2025-08-11">
+<meta name="author" content="Anne-Christine Da Silva (Quarto) and Michiel Arts (R package)">
+<meta name="dcterms.date" content="2025-09-07">
 
-<title>Time-Series Analysis of Paleoclimate Signals – Practical 04</title>
+<title>Time-Series Analysis of Paleoclimate Signals – Practical 04 - Basics on WaverideR</title>
 <style>
 code{white-space: pre-wrap;}
 span.smallcaps{font-variant: small-caps;}
@@ -3112,8 +3112,8 @@ background: darkturquoise;
 <header id="title-block-header" class="quarto-title-block default page-columns page-full">
   <div class="quarto-title-banner page-columns page-full">
     <div class="quarto-title column-body">
-      <h1 class="title">Time-Series Analysis of Paleoclimate Signals – Practical 04</h1>
-            <p class="subtitle lead"></p><p>Basics on WaverideR <br> Coldigiocco Cyclonet Summer School 2025<br> by C. Zeeden, M. Crucifix, A.C. Da Silva</p><p></p>
+      <h1 class="title">Time-Series Analysis of Paleoclimate Signals – Practical 04 - Basics on WaverideR</h1>
+            <p class="subtitle lead"></p><p>Coldigiocco Cyclonet Summer School 2025<br></p><p></p>
                       </div>
   </div>
     
@@ -3123,18 +3123,26 @@ background: darkturquoise;
       <div>
       <div class="quarto-title-meta-heading">Author</div>
       <div class="quarto-title-meta-contents">
-               <p>Anne-Christine Da Silva &amp; Michiel Arts </p>
+               <p>Anne-Christine Da Silva (Quarto) and Michiel Arts (R package) </p>
             </div>
     </div>
       
       <div>
       <div class="quarto-title-meta-heading">Published</div>
       <div class="quarto-title-meta-contents">
-        <p class="date">August 11, 2025</p>
+        <p class="date">September 7, 2025</p>
       </div>
     </div>
     
       
+      <div>
+      <div class="quarto-title-meta-heading">Doi</div>
+      <div class="quarto-title-meta-contents">
+        <p class="doi">
+          <a href="https://doi.org/https://doi.org/10.5281/zenodo.17020808">https://doi.org/10.5281/zenodo.17020808</a>
+        </p>
+      </div>
+    </div>
     </div>
     
   
@@ -3173,14 +3181,14 @@ background: darkturquoise;
 </section>
 <section id="waverider-on-magnetic-susceptibility-devonian-dataset-sullivan-core" class="level2">
 <h2 class="anchored" data-anchor-id="waverider-on-magnetic-susceptibility-devonian-dataset-sullivan-core">WaverideR on Magnetic susceptibility Devonian dataset (Sullivan Core)</h2>
-<p>In the next exercise we will look at part of the magnetic susceptibility data set of <span class="citation" data-cites="Pas2018">(<a href="#ref-Pas2018" role="doc-biblioref"><strong>Pas2018?</strong></a>)</span> from the Sullivan Core. The core principally consists of shales which were deposited in the the Illinois basin (USA) during the the Fammenian (late Devonian)</p>
+<p>In the next exercise we will look at part of the magnetic susceptibility data set of <span class="citation" data-cites="Pas2018">(<a href="#ref-Pas2018" role="doc-biblioref">Pas et al. 2018</a>)</span> from the Sullivan Core. The core principally consists of shales which were deposited in the the Illinois basin (USA) during the the Fammenian (late Devonian)</p>
 <p>For more background information please read: Damien Pas, Linda Hinnov, James E. (Jed) Day, Kenneth Kodama, Matthias Sinnesael, Wei Liu, Cyclostratigraphic calibration of the Famennian stage (Late Devonian, Illinois Basin, USA), Earth and Planetary Science Letters, Volume 488, 2018, Pages 102-114, ISSN 0012-821X, doi:<a href="doi:10.1016/j.epsl.2018.02.010" class="uri">doi:10.1016/j.epsl.2018.02.010</a></p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb2"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Those data are embedded into WaverideR</span></span>
 <span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="co">#plot the data</span></span>
 <span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="fu">plot</span>(mag,<span class="at">type=</span><span class="st">&quot;l&quot;</span>,<span class="at">xlab=</span><span class="st">&quot;depth (metres)&quot;</span>,<span class="at">ylab=</span><span class="st">&quot;magnetic sucept&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </div>
-<p>A wavelet is truncated sine waves with N number of cycles contained within just like a windowed Fast Fourier analysis like the EHA function of ‘astrochron’ is is possible to track changing periods in the depth domain</p>
+<p>A wavelet is truncated sine waves with N number of cycles contained within just like a windowed Fast Fourier analysis. The WaverideR package includes a function to track the evolving period of the cycle you want to focus. Then you can use this tracking line to transform your record from the distance to the time domain. A similar function exists in astrochron with eha (see trackFreq or traceFreq).</p>
 <div class="cell">
 <div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">#Do the wavelet analysis</span></span>
 <span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>mag_wt <span class="ot">&lt;-</span></span>
@@ -3239,10 +3247,10 @@ Tip on WaverideR plotting
 </div>
 </div>
 <div class="callout-body-container callout-body">
-<p>Classically when working in R, the function dev_new is set to TRUE, which means that R opens a new plotting window to plot the plot, this guarantees a “nice” looking plot. However when running an R Quarto chunck, to allow plotting it needs to be set to dev_new = FALSE; but the plots are of lower quality. If you transfer this code to R, set dev_new to TRUE.</p>
+<p>Classically when working in R, the argument “dev_new” in the function plot_wavelet is set to TRUE by default, which means that R opens a new plotting window to plot the plot, this guarantees a “nice” looking plot. When running an R Quarto chunck, to allow plotting it needs to be set to dev_new = FALSE. However, the plots are of lower quality. If you transfer this code to R, set dev_new to TRUE.</p>
 </div>
 </div>
-<p>We can see some spectra power with a period of 2-4 m, which according to <span class="citation" data-cites="Pas2018">(<a href="#ref-Pas2018" role="doc-biblioref"><strong>Pas2018?</strong></a>)</span> is the 405kyr eccentricity cycle. The period in Kyr of this cycle is very stable and thus we can use this cycle to create an Age model.</p>
+<p>We can see some spectra power with a period of 2-4 m, which according to <span class="citation" data-cites="Pas2018">(<a href="#ref-Pas2018" role="doc-biblioref">Pas et al. 2018</a>)</span> is the 405kyr eccentricity cycle. The period in Kyr of this cycle is very stable and thus we can use this cycle to create an age model.</p>
 <p>We can track the band of high spectral power in the wavelet spectra, with the track_period_wavelet” function, allowing to track the ~3 m long eccentricity cycle in the Wavelet spectra.</p>
 </section>
 <section id="tracking-a-specific-cycle-in-waverider" class="level2">
@@ -3378,6 +3386,9 @@ Arts, M., C. Corradini, M. Pondrelli, D. Pas, and A. C. Da Silva. 2024. <span>�
 </div>
 <div id="ref-ArtsWaverideR2023" class="csl-entry" role="listitem">
 Arts, Michiel. 2023. <span>“<span>WaverideR</span>: <span>Extracting Signals</span> from <span>Wavelet Spectra</span>.”</span> Comprehensive R Archive Network. <a href="https://doi.org/10.32614/CRAN.package.WaverideR">https://doi.org/10.32614/CRAN.package.WaverideR</a>.
+</div>
+<div id="ref-Pas2018" class="csl-entry" role="listitem">
+Pas, Damien, Linda Hinnov, James E. (Jed) Day, Kenneth Kodama, Matthias Sinnesael, and Wei Liu. 2018. <span>“Cyclostratigraphic Calibration of the <span>Famennian</span> Stage (<span>Late Devonian</span>, <span>Illinois Basin</span>, <span>USA</span>).”</span> <em>Earth and Planetary Science Letters</em> 488: 102–14. <a href="https://doi.org/10.1016/j.epsl.2018.02.010">https://doi.org/10.1016/j.epsl.2018.02.010</a>.
 </div>
 </div></section></div></main>
 <!-- /main column -->
